@@ -34,19 +34,14 @@ if data is not None:
     # Group by date and calculate the average price
     price_trend = df_item.groupby('date')['price'].mean()
     
-    try:
-        # Plotting
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.plot(price_trend.index, price_trend.values, marker='o')
-        ax.set_title(f'Price Trend for Item Code {item_code}')
-        ax.set_xlabel('Date')
-        ax.set_ylabel('Price')
-        ax.grid(True)
-        plt.xticks(rotation=45)
+    # Plotting
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(price_trend.index, price_trend.values, marker='o')
+    ax.set_title(f'Price Trend for Item Code {item_code}')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Price')
+    ax.grid(True)
+    plt.xticks(rotation=45)
         
-        # Display the plot in Streamlit
-        st.pyplot(fig)
-    except Exception as e:
-        st.error(f"Error creating plot: {str(e)}")
-else:
-    st.error("Failed to load data. Please check your data file path and contents.")
+    # Display the plot in Streamlit
+    st.pyplot(fig)
