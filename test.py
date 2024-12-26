@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the uploaded CSV file
-df = pd.read_csv('fyp/blob/main/data/combined_filtered_allyears.csv')
+df = pd.read_csv('mount/src/fyp/data/combined_filtered_allyears.csv')
 
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
