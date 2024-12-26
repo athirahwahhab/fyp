@@ -8,10 +8,6 @@ import seaborn as sns
 file_path = '/content/combined_output_latest.csv'
 df = pd.read_csv(file_path)
 
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
 item_code = 1  # AYAM STANDARD
