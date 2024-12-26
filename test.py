@@ -3,17 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-data = st.file_uploader(
-    "combined_filtered_allyears .csv", accept_multiple_files=True)
 
-for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    st.write("filename:", uploaded_file.name)
-    st.write(bytes_data)
-
-    
-    # Title for the Streamlit app
-    st.title("Price Trend Analysis")
+# Load the uploaded CSV file
+file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
+df = pd.read_csv(file_path)    
+# Title for the Streamlit app
+st.title("Price Trend Analysis")
     
     # Show raw data if checkbox is selected
     if st.checkbox('Show raw data'):
