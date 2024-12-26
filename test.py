@@ -3,19 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-@st.cache_data
-def load_data(nrows):
-    try:
-        data = pd.read_csv('fyp/data/combined_filtered_allyears.csv', nrows=nrows)
-        return data
-    except Exception as e:
-        st.error(f"Error loading data: {str(e)}")
-        return None
+data = st.file_uploader(
+    "combined_filtered_allyears .csv", accept_multiple_files=True)
 
-# Load the data first
-data = load_data(nrows=None)  # None to load all rows
+for uploaded_file in uploaded_files:
+    bytes_data = uploaded_file.read()
+    st.write("filename:", uploaded_file.name)
+    st.write(bytes_data)
 
-if data is not None:
+    
     # Title for the Streamlit app
     st.title("Price Trend Analysis")
     
