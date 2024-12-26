@@ -5,7 +5,7 @@ import seaborn as sns
 
 @st.cache_data
 def load_data(nrows):
-    data = pd.read_csv('data/combined_filtered_allyears.csv', nrows=nrows)
+    data = pd.read_csv('fyp/data/combined_filtered_allyears .csv', nrows=nrows)
     return data
 
 if st.checkbox('Show raw data'):
