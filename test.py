@@ -9,7 +9,7 @@ def load_data(nrows):
     return data
 
 # Load data
-data = load_data(1000)  # Load the first 1000 rows, adjust as needed
+data = load_data(10)  # Load the first 1000 rows, adjust as needed
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
