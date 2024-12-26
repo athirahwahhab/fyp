@@ -4,8 +4,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the uploaded CSV file
-df = pd.read_csv('mount/src/fyp/data/combined_filtered_allyears.csv')
+@st.cache_data
+def load_data(nrows):
+    data = pd.read_csv('combined_filtered_allyears', nrows=nrows)
+    lowercase = lambda x: str(x).lower()
+    data.rename(lowercase, axis='columns', inplace=True)
+    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
+    return data
+
+data_load_state = st.text('Loading data...')
+data = load_data(10000)
+data_load_state.text("Done! (using st.cache_data)")
+
+if st.checkbox('Show raw data'):
+    st.subheader('Raw data')
+    st.write(data)
 
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
