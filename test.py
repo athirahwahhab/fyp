@@ -6,7 +6,7 @@ import seaborn as sns
 @st.cache_data
 def load_data(nrows):
     # Load the data from the CSV file and preprocess it
-    data = pd.read_csv('combined_filtered_allyears.csv', nrows=nrows)
+    data = pd.read_csv('data/combined_filtered_allyears.csv', nrows=nrows)
     lowercase = lambda x: str(x).lower()
     data.rename(lowercase, axis='columns', inplace=True)
     data['date'] = pd.to_datetime(data['date'])  # Ensure 'date' is a datetime type
