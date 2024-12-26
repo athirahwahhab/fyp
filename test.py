@@ -8,9 +8,6 @@ def load_data(nrows):
     data = pd.read_csv('data/combined_filtered_allyears.csv', nrows=nrows)
     return data
 
-# Load data
-data = load_data(10)  # Load the first 1000 rows, adjust as needed
-
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
     st.write(data)
