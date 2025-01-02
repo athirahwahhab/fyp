@@ -40,7 +40,7 @@ plt.show()
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
 
-st.title("Ayam Standard")
+st.title("Ayam Super")
 
 item_2_data = df[df['item_code'] == 2 ].copy()
 
