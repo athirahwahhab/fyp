@@ -82,4 +82,4 @@ plt.ylabel('Price (RM)', fontsize=12)
 plt.legend()
 plt.grid(True)
 plt.show()
-
+st.pyplot(plt.gcf())
