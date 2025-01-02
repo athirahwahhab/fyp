@@ -8,8 +8,10 @@ import seaborn as sns
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
 df = pd.read_csv(file_path)   
 
-st.markdown("# Ayam Standard")
-st.sidebar.markdown("# Ayam Standard")
+st.markdown("# Ayam ")
+st.sidebar.markdown("# Ayam")
+
+st.title("Ayam Standard")
 # Filter data for item_code = 1
 item_1_data = df[df['item_code'] == 1].copy()
 
@@ -38,8 +40,7 @@ plt.show()
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
 
-st.markdown("# Ayam Super")
-st.sidebar.markdown("# Ayam Super")
+st.title("Ayam Standard")
 
 item_2_data = df[df['item_code'] == 2 ].copy()
 
