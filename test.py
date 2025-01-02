@@ -9,22 +9,6 @@ file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main
 df = pd.read_csv(file_path)    
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
-st.title("Ayam Standard ")
-item_code = 1  # AYAM STANDARD
-df_item = df[df['item_code'] == item_code]  # Filter data by item code
-
-# Group by date and calculate the average price
-price_trend = df_item.groupby('date')['price'].mean()
-
-# price trend
-plt.figure(figsize=(10,6))
-plt.plot(price_trend.index, price_trend.values, marker='o')
-plt.title(f'Price Trend for Item Code {item_code}')
-plt.xlabel('Date')
-plt.ylabel('Price')
-plt.grid(True)
-# Display the plot in Streamlit
-st.pyplot(plt.gcf())
 
 # Filter data for item_code = 1
 item_1_data = df[df['item_code'] == 1].copy()
