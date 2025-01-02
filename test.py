@@ -8,12 +8,8 @@ import seaborn as sns
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
 df = pd.read_csv(file_path)   
 
-st.markdown("# Main page 🎈")
-st.sidebar.markdown("# Main page 🎈")
-# Title for the Streamlit app
-st.title("Price Trend Analysis")
-
-st.title("Ayam Standard")
+st.markdown("# Ayam Standard")
+st.sidebar.markdown("# Ayam Standard")
 # Filter data for item_code = 1
 item_1_data = df[df['item_code'] == 1].copy()
 
@@ -42,7 +38,9 @@ plt.show()
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
 
-st.title("Ayam Super")
+st.markdown("# Ayam Super")
+st.sidebar.markdown("# Ayam Super")
+
 item_2_data = df[df['item_code'] == 2 ].copy()
 
 # Convert 'date' to datetime format
