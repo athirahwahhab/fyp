@@ -10,6 +10,7 @@ df = pd.read_csv(file_path)
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
 
+st.title("Ayam Standard")
 # Filter data for item_code = 1
 item_1_data = df[df['item_code'] == 1].copy()
 
