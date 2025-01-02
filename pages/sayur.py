@@ -12,7 +12,6 @@ st.title("Sayur Bayam Hijau")
 item_1556_data = df[df['item_code'] == 1556].copy()
 
 st.markdown("Sayur")
-st.sidebar.markdown(" Sayur 🎉")
 
 # Convert 'date' to datetime format
 item_1556_data['date'] = pd.to_datetime(item_1556_data['date'], format='%d-%b-%y')
