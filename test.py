@@ -8,8 +8,6 @@ import seaborn as sns
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
 df = pd.read_csv(file_path)   
 
-st.markdown("# Ayam ")
-st.sidebar.markdown("# Ayam")
 
 st.title("Ayam Standard")
 # Filter data for item_code = 1
