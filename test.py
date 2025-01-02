@@ -3,9 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 # Load the uploaded CSV file
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
-df = pd.read_csv(file_path)    
+df = pd.read_csv(file_path)   
+
+st.markdown("# Main page 🎈")
+st.sidebar.markdown("# Main page 🎈")
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
 
