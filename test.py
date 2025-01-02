@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
 # Load the uploaded CSV file
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
 df = pd.read_csv(file_path)    
@@ -27,7 +26,6 @@ item_1_daily_prices = item_1_data.groupby('date')['price'].mean()
 item_1_daily_prices.head(), item_1_daily_prices.info()
 
 st.title("Daily Ayam Standard Average  ")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_1_daily_prices, label='Daily Average Price', color='blue')
@@ -41,7 +39,6 @@ plt.show()
 st.pyplot(plt.gcf())
 
 st.title("Ayam Super")
-
 item_2_data = df[df['item_code'] == 2 ].copy()
 
 # Convert 'date' to datetime format
@@ -57,7 +54,6 @@ item_2_daily_prices = item_2_data.groupby('date')['price'].mean()
 item_2_daily_prices.head(), item_2_daily_prices.info()
 
 st.title("Ayam Super Average Daily Prices ")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_2_daily_prices, label='Daily Average Price', color='blue')
@@ -86,7 +82,6 @@ item_55_daily_prices = item_55_data.groupby('date')['price'].mean()
 item_55_daily_prices.head(), item_55_daily_prices.info()
 
 st.title("Ikan Kembung Daily Average Prices")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_55_daily_prices, label='Daily Average Price', color='blue')
@@ -115,7 +110,6 @@ item_69_daily_prices = item_69_data.groupby('date')['price'].mean()
 item_69_daily_prices.head(), item_69_daily_prices.info()
 
 st.title("Ikan Selar Kuning Daily Average Prices")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_69_daily_prices, label='Daily Average Price', color='blue')
@@ -144,7 +138,6 @@ item_1111_daily_prices = item_1111_data.groupby('date')['price'].mean()
 item_1111_daily_prices.head(), item_1111_daily_prices.info()
 
 st.title("Telur Gred C Daily Average Prices")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_1111_daily_prices, label='Daily Average Price', color='blue')
@@ -173,7 +166,6 @@ item_1556_daily_prices = item_1556_data.groupby('date')['price'].mean()
 item_1556_daily_prices.head(), item_1556_daily_prices.info()
 
 st.title("Sayur Bayam Hijau Daily Average Prices")
-
 # Plot the time series data
 plt.figure(figsize=(12, 6))
 plt.plot(item_1556_daily_prices, label='Daily Average Price', color='blue')
