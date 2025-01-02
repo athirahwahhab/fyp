@@ -10,10 +10,6 @@ df = pd.read_csv(file_path)
 # Title for the Streamlit app
 st.title("Price Trend Analysis")
     
- # Show raw data if checkbox is selected
-if st.checkbox('Show raw data'):
-    st.subheader('Raw data')
-    st.write(data)
     
 item_code = 1  # AYAM STANDARD
 df_item = df[df['item_code'] == item_code]  # Filter data by item code
@@ -30,3 +26,33 @@ plt.ylabel('Price')
 plt.grid(True)
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
+
+# Filter data for item_code = 1
+item_1_data = df[df['item_code'] == 1].copy()
+
+# Convert 'date' to datetime format
+item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
+
+# Set 'date' as the index
+item_1_data.set_index('date', inplace=True)
+
+# Aggregating prices by date (average price per day)
+item_1_daily_prices = item_1_data.groupby('date')['price'].mean()
+
+# Display the processed data
+item_1_daily_prices.head(), item_1_daily_prices.info()
+
+import matplotlib.pyplot as plt
+
+# Plot the time series data
+plt.figure(figsize=(12, 6))
+plt.plot(item_1_daily_prices, label='Daily Average Price', color='blue')
+plt.title('Daily Average Prices of Item 1', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Price (RM)', fontsize=12)
+plt.legend()
+plt.grid(True)
+plt.show()
+# Display the plot in Streamlit
+st.pyplot(plt.gcf())
+
