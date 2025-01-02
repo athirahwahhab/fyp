@@ -1,3 +1,17 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+# Load the uploaded CSV file
+file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
+df = pd.read_csv(file_path)   
+
+st.markdown("# Ikan ")
+st.sidebar.markdown("# Ikan")
+
+
 st.title("Ikan Kembung")
 # Filter data for item_code = 55
 item_55_data = df[df['item_code'] == 55].copy()
