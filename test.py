@@ -35,4 +35,4 @@ for col in df.select_dtypes(include=['object']):
     plt.xlabel(col)
     plt.ylabel('Count')
     plt.show()
-  st.pyplot(plt.gcf())
+  st.pyplot(plt.gcf()
