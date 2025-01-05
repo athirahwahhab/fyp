@@ -29,8 +29,9 @@ def main():
 
     # Create and display a correlation matrix
     st.write("## Correlation Matrix")
-    correlation_matrix = df.select_dtypes(include=['number']).corr()
+    correlation_matrix = df.select_dtypes(include=['number']).corr()  
     sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+    plt.show()
     st.pyplot(plt.gcf())  # Streamlit function to render matplotlib plots
 
 if __name__ == "__main__":
