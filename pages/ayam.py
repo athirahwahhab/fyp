@@ -5,7 +5,7 @@ import seaborn as sns
 
 
 # Load the uploaded CSV file
-file_path = 'https://github.com/athirahwahhab/fyp/blob/main/data/combined_output_latest.csv'
+file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
 df = pd.read_csv(file_path)   
 
 st.markdown("# Ayam ")
