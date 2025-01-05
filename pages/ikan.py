@@ -35,11 +35,11 @@ plt.grid(True)
 plt.show()
 st.pyplot(plt.gcf())
 
-st.title("Ikan Kembung Monthly Average Prices")
-
-# Filter the data for a specific item, e.g., item_code 55
+# Filter the data for a specific item, e.g., item_code 1
 item_code_to_check = 55.0
 filtered_item_data = average_price_per_item_monthly[average_price_per_item_monthly['item_code'] == item_code_to_check]
+
+st.title("Ikan Kembung Average Monthly Prices")
 
 # Plotting the price trend for the specific item
 plt.figure(figsize=(10, 6))
