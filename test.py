@@ -1,39 +1,37 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import streamlit as st
 
-# Load the uploaded CSV file
-file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
-df = pd.read_csv(file_path)
+# Example data processing script with Streamlit integration
+def main():
+    # Load your dataset
+    df = pd.read_csv("your_dataset.csv")
 
-# Display the first few rows to understand its structure
-df.head()
+    # Display dataset information
+    st.write("## Dataset Information")
+    st.write(df.info())
 
+    # Generate and display descriptive statistics
+    st.write("## Descriptive Statistics")
+    st.write(df.describe())
 
-# Check the data types of each column
-print(df.info())
+    # Identify and display missing values
+    st.write("## Missing Values")
+    missing_values = df.isnull().sum()
+    st.write(missing_values)
 
-# Generate descriptive statistics for numerical columns
-print(df.describe())
+    # Visualize the distribution of numerical features using histograms
+    st.write("## Numerical Feature Distributions")
+    df.hist(figsize=(15, 10))
+    plt.tight_layout()  # Adjust layout for better visualization
+    st.pyplot(plt.gcf())  # Use this in Streamlit to display plots
 
-# Identify missing values in the dataset
-print(df.isnull().sum())
+    # Create and display a correlation matrix
+    st.write("## Correlation Matrix")
+    correlation_matrix = df.select_dtypes(include=['number']).corr()
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+    st.pyplot(plt.gcf())  # Streamlit function to render matplotlib plots
 
-# Visualize the distribution of numerical features using histograms
-df.hist(figsize=(15, 10))
-plt.show()
-
-# Create a correlation matrix to observe relationships between numerical features
-correlation_matrix = df.select_dtypes(include=['number']).corr()  
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
-plt.show()
-st.pyplot(plt.gcf())
-# Explore categorical features using bar plots (replace 'categorical_column' with actual column name)
-for col in df.select_dtypes(include=['object']):
-    plt.figure(figsize=(10, 6))
-    df[col].value_counts().plot(kind='bar')
-    plt.title(f'Distribution of {col}')
-    plt.xlabel(col)
-    plt.ylabel('Count')
-    plt.show()
-  st.pyplot(plt.gcf())
+if __name__ == "__main__":
+    main()
