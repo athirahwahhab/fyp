@@ -9,8 +9,7 @@ def main():
     df = pd.read_csv("https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv")
 
     # Display dataset information
-    st.write("## Dataset Information")
-    st.write(df.info())
+    st.write("## Exploratary Data Analysis")
 
     # Generate and display descriptive statistics
     st.write("## Descriptive Statistics")
