@@ -6,7 +6,7 @@ import streamlit as st
 # Example data processing script with Streamlit integration
 def main():
     # Load your dataset
-    df = pd.read_csv("your_dataset.csv")
+    df = pd.read_csv("https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv")
 
     # Display dataset information
     st.write("## Dataset Information")
