@@ -5,7 +5,7 @@ import seaborn as sns
 
 
 # Load the uploaded CSV file
-file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv'
+file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
 df = pd.read_csv(file_path) 
 st.title("Ikan Kembung")
 # Filter data for item_code = 55
