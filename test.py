@@ -27,6 +27,7 @@ plt.show()
 correlation_matrix = df.select_dtypes(include=['number']).corr()  
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
 plt.show()
+st.pyplot(plt.gcf())
 # Explore categorical features using bar plots (replace 'categorical_column' with actual column name)
 for col in df.select_dtypes(include=['object']):
     plt.figure(figsize=(10, 6))
@@ -35,4 +36,4 @@ for col in df.select_dtypes(include=['object']):
     plt.xlabel(col)
     plt.ylabel('Count')
     plt.show()
-  st.pyplot(plt.gcf()
+  st.pyplot(plt.gcf())
