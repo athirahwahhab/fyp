@@ -26,13 +26,13 @@ def main():
     df.hist(figsize=(15, 10))
     plt.tight_layout()  # Adjust layout for better visualization
     st.pyplot(plt.gcf())  # Use this in Streamlit to display plots
-
-    # Create and display a correlation matrix
+    # Create and display a correlation matrix heatmap
     st.write("## Correlation Matrix")
-    correlation_matrix = df.select_dtypes(include=['number']).corr()  
-    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
-    plt.show()
-    st.pyplot(plt.gcf())  # Streamlit function to render matplotlib plots
+    correlation_matrix = df.select_dtypes(include=['number']).corr()
+    # Plot the heatmap
+    plt.figure(figsize=(10, 8))  # Adjust figure size as needed
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+    st.pyplot(plt.gcf())  # Render the heatmap in Streamlit
 
 if __name__ == "__main__":
     main()
