@@ -60,7 +60,7 @@ st.title("Ayam Standard Average Monthly Prices")
 # Plotting the price trend for the specific item
 plt.figure(figsize=(10, 6))
 plt.plot(filtered_item_data['year_month'].astype(str), filtered_item_data['price'], marker='o', linestyle='-', color='g')
-plt.title(f'Price Trend for Item {item_code_to_check}')
+plt.title(f'Price Trend for Item {item_code_to_check} Monthly Average')
 plt.xlabel('Month')
 plt.ylabel('Average Price (RM)')
 plt.xticks(rotation=45)
@@ -97,5 +97,24 @@ plt.xlabel('Date', fontsize=12)
 plt.ylabel('Price (RM)', fontsize=12)
 plt.legend()
 plt.grid(True)
+plt.show()
+st.pyplot(plt.gcf())
+
+st.title("Ayam Super Average Monthly Prices")
+# Filter the data for a specific item, e.g., item_code 2
+item_code_to_check = 2
+filtered_item_data = average_price_per_item_monthly[average_price_per_item_monthly['item_code'] == item_code_to_check]
+
+# Plotting the price trend for the specific item
+plt.figure(figsize=(10, 6))
+plt.plot(filtered_item_data['year_month'].astype(str), filtered_item_data['price'], marker='o', linestyle='-', color='g')
+plt.title(f'Price Trend for Item {item_code_to_check} Monthly Average')
+plt.xlabel('Month')
+plt.ylabel('Average Price (RM)')
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.tight_layout()
+
+# Show the plot
 plt.show()
 st.pyplot(plt.gcf())
