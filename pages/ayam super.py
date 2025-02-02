@@ -40,7 +40,6 @@ plt.grid(True)
 plt.show()
 st.pyplot(plt.gcf())
 
-st.markdown(multi)
 multi = '''At the beginning of July 2023, the price start was quite high, around RM10.00 per kilogram. 
 Throughout the month, the price stayed stable at around RM 10.00 before it went down. 
 In August 2023, there was a sudden drop in price falling about RM 8.30 which was the lowest point during this time.
@@ -84,7 +83,6 @@ plt.tight_layout()
 # Show the plot
 plt.show()
 st.pyplot(plt.gcf())
-st.markdown(multi)
 multi = '''In July 2023, the price was approximately RM 9.75 per kilogram, which is one of the highest monthly averages during this time.
 This shows a strong market value at the beginning of the analysis. 
 Next, in August 2023 the price dropped sharply to the lowest average of about RM 8.25 per kilogram. 
