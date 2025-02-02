@@ -150,7 +150,7 @@ if uploaded_file:
     df = pd.read_csv(uploaded_file, parse_dates=['date'])
 
     # Select Item Code
-    item_codes = df['item_code'].unique()
+    item_codes = df['1'].unique()
     item_code = st.selectbox("Select Item Code:", item_codes)
 
     # Filter data for selected item
