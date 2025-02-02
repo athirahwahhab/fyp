@@ -8,7 +8,7 @@ file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main
 df = pd.read_csv(file_path)   
 
 st.title("Ayam Super")
-st.markdown(multi)
+
 multi = ''' Ayam Super is a whole chicken sold without the head, feet, liver, and gizzard. This makes it more processed and convenient for cooking, catering to consumers who prefer less preparation work. 
 As of June 2022, the retail price for Ayam Super was capped at RM9.90 per kilogram in Peninsular Malaysia under the same government price control initiative. 
 Ayam Super is slightly more expensive than Ayam Standard due to the additional cleaning and processing involved, making it a preferred choice for those seeking convenience.
