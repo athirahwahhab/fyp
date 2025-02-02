@@ -128,6 +128,7 @@ st.markdown(multi)
 
 st.title("Prediction Model ARIMA")
 
+import streamlit as st
 import warnings
 warnings.filterwarnings('ignore')
 import numpy as np
@@ -139,83 +140,101 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import math
 
-# Load and prepare data
-item_code = 1  # Specify which item to analyze
+# Streamlit app title
+st.title("📈 Food Price Prediction using SARIMA")
 
-df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv', parse_dates=['date'])
-item_data = df[df['item_code'] == item_code].copy()
+# Upload dataset
+uploaded_file = st.file_uploader("https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv", type=["csv"])
 
-# Calculate daily average
-daily_avg = item_data.groupby('date')['price'].mean().reset_index()
+if uploaded_file:
+    df = pd.read_csv(uploaded_file, parse_dates=['date'])
 
-# Handle missing values using interpolation
-daily_avg.set_index('date', inplace=True)
-daily_avg.sort_index(inplace=True)
-idx = pd.date_range(daily_avg.index.min(), daily_avg.index.max())
-daily_avg = daily_avg.reindex(idx)
-daily_avg['price'] = daily_avg['price'].interpolate(method='linear')
+    # Select Item Code
+    item_codes = df['item_code'].unique()
+    item_code = st.selectbox("Select Item Code:", item_codes)
 
- # Test for stationarity
-st.subheader("📉 Stationarity Test (Dickey-Fuller)")
-adft = adfuller(daily_avg['price'].dropna(), autolag='AIC')
-result_dict = {
+    # Filter data for selected item
+    item_data = df[df['item_code'] == item_code].copy()
+
+    # Calculate daily average
+    daily_avg = item_data.groupby('date')['price'].mean().reset_index()
+
+    # Handle missing values using interpolation
+    daily_avg.set_index('date', inplace=True)
+    daily_avg.sort_index(inplace=True)
+    daily_avg['price'] = daily_avg['price'].interpolate(method='linear')
+
+    # Plot initial price history
+    st.subheader(f"📊 Average Daily Price for Item {item_code}")
+    fig, ax = plt.subplots(figsize=(10,6))
+    ax.plot(daily_avg['price'])
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Price')
+    ax.set_title(f'Average Daily Price for Item {item_code}')
+    ax.grid(True)
+    st.pyplot(fig)
+
+    # Test for stationarity
+    st.subheader("📉 Stationarity Test (Dickey-Fuller)")
+    adft = adfuller(daily_avg['price'].dropna(), autolag='AIC')
+    result_dict = {
         "Test Statistic": adft[0],
         "p-value": adft[1],
         "No. of lags used": adft[2],
         "Number of observations used": adft[3],
     }
-for key, values in adft[4].items():
-result_dict[f"Critical Value ({key})"] = values
-st.write(result_dict)
+    for key, values in adft[4].items():
+        result_dict[f"Critical Value ({key})"] = values
+    st.write(result_dict)
 
-# Decompose the time series
-st.subheader("🔍 Seasonal Decomposition")
-clean_data = daily_avg['price'].dropna()
-result = seasonal_decompose(clean_data, model='multiplicative', period=30)
+    # Decompose the time series
+    st.subheader("🔍 Seasonal Decomposition")
+    clean_data = daily_avg['price'].dropna()
+    result = seasonal_decompose(clean_data, model='multiplicative', period=30)
 
-fig = result.plot()
-fig.set_size_inches(12, 8)
-st.pyplot(fig)
+    fig = result.plot()
+    fig.set_size_inches(12, 8)
+    st.pyplot(fig)
 
-# Prepare data for forecasting
-df_log = np.log(daily_avg['price'].dropna())
+    # Prepare data for forecasting
+    df_log = np.log(daily_avg['price'].dropna())
 
-# Train SARIMA Model
-st.subheader("📡 SARIMA Model Training")
-model = SARIMAX(df_log, order=(2, 0, 0), seasonal_order=(1, 1, 1, 7))
-fitted = model.fit()
-st.text(fitted.summary())
+    # Train SARIMA Model
+    st.subheader("📡 SARIMA Model Training")
+    model = SARIMAX(df_log, order=(2, 0, 0), seasonal_order=(1, 1, 1, 7))
+    fitted = model.fit()
+    st.text(fitted.summary())
 
-# Forecast 90 days into the future
-forecast_period = st.slider("Select Forecast Period (Days):", 30, 180, 90)
-forecast_results = fitted.get_forecast(steps=forecast_period)
-fc = forecast_results.predicted_mean
-conf_int = forecast_results.conf_int()
+    # Forecast 90 days into the future
+    forecast_period = st.slider("Select Forecast Period (Days):", 30, 180, 90)
+    forecast_results = fitted.get_forecast(steps=forecast_period)
+    fc = forecast_results.predicted_mean
+    conf_int = forecast_results.conf_int()
 
-# Generate future dates starting from the last date
-last_date = df_log.index[-1]
-future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
+    # Generate future dates starting from the last date
+    last_date = df_log.index[-1]
+    future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
                                  periods=forecast_period,
                                  freq='D')
 
-# Convert back to original scale
-fc_series = np.exp(pd.Series(fc, index=future_dates))
-lower_series = np.exp(pd.Series(conf_int.iloc[:, 0], index=future_dates))
-upper_series = np.exp(pd.Series(conf_int.iloc[:, 1], index=future_dates))
+    # Convert back to original scale
+    fc_series = np.exp(pd.Series(fc, index=future_dates))
+    lower_series = np.exp(pd.Series(conf_int.iloc[:, 0], index=future_dates))
+    upper_series = np.exp(pd.Series(conf_int.iloc[:, 1], index=future_dates))
 
-# Plot forecast results
-st.subheader("📅 Price Forecast")
-fig, ax = plt.subplots(figsize=(12,6))
-ax.plot(daily_avg['price'], label="Historical Data", alpha=0.8)
-ax.plot(fc_series, color='orange', label='Predicted Price')
-ax.fill_between(future_dates, lower_series, upper_series, color='orange', alpha=.1, label='Confidence Interval')
-ax.set_title(f'Price Prediction for Item Code {item_code}')
-ax.set_xlabel('Time')
-ax.set_ylabel('Price')
-ax.legend(loc='upper left', fontsize=8)
-ax.grid(True, alpha=0.3)
-st.pyplot(fig)
+    # Plot forecast results
+    st.subheader("📅 Price Forecast")
+    fig, ax = plt.subplots(figsize=(12,6))
+    ax.plot(daily_avg['price'], label="Historical Data", alpha=0.8)
+    ax.plot(fc_series, color='orange', label='Predicted Price')
+    ax.fill_between(future_dates, lower_series, upper_series, color='orange', alpha=.1, label='Confidence Interval')
+    ax.set_title(f'Price Prediction for Item Code {item_code}')
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Price')
+    ax.legend(loc='upper left', fontsize=8)
+    ax.grid(True, alpha=0.3)
+    st.pyplot(fig)
 
-# Show future predictions
-st.subheader("📊 Future Price Predictions")
-st.dataframe(fc_series)
+    # Show future predictions
+    st.subheader("📊 Future Price Predictions")
+    st.dataframe(fc_series)
