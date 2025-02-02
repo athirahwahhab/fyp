@@ -8,8 +8,6 @@ import seaborn as sns
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
 df = pd.read_csv(file_path) 
 
-st.markdown("# Ikan")
-
 st.title("Ikan Kembung")
 # Filter data for item_code = 55
 item_55_data = df[df['item_code'] == 55].copy()
