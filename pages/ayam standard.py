@@ -100,12 +100,29 @@ st.markdown(multi)
 st.title("Diagnostic Analysis")
 
 multi = ''' The factors that contributes chicken prices from June 2023 to June 2024:
-Supply chain really played a significant role in the price ups and downs. 
-In mid-2023, government subsidies and price controls helped reduce production costs leading to a price drop, especially when the “Jualan Rahmah” program offered discounted chicken to the public. However, in the later months, severe floods in Kelantan caused by the monsson season disrupted transportation and the overall supply chain, making it difficult to deliver goods to markets. 
-This make the price higher due to logistical challenges and road closures as reported in The Star News about Flood Woes Worsen in Kelantan, (2023).  Additionally, inflation from April to June 2024 worse the supply chain issues, including higher transportation costs and feed prices, making it even harder to maintain steady chicken prices shown (Consumer Prices | OpenDOSM, 2025).
-Climate change also had a impact in the price trend particularly through the monsoon season. The end-of-year flooding in Kelantan disrupted the chicken supply chain, affecting market operations and make prices increase. The seasonal flooding typically hinders production and distribution, further complicating the supply of chicken(NADMA, 2023).
-From economic perspective, inflation played a crucial role especially from April to June 2024. As inflation rise from 1.8% to 2% the cost of chicken also increased. Higher feed costs, plus with rising transportation expenses made chicken more expensive during that period(Malaysia Inflation Rate, 2020).
-Lastly, market fundamentals and demand were also influencing price trends. In  the middle of 2023, a drop-in chicken prices were because oversupply and decreased consumer demand(Jamaludin et al., 2023). However, as the Ramadhan season approached in early 2024, there was a surge in demand for chicken particularly for iftar and sahur meals, which contributed to the gradual price increase (Bernama, 2024c). These market shifts, combined with the factors mentioned, shaped the overall price trend through the year.
-
+Supply chain really played a significant role in the price ups and downs. In mid-2023, 
+government subsidies and price controls helped reduce production costs leading to a price drop, 
+especially when the “Jualan Rahmah” program offered discounted chicken to the public.
+However, in the later months, severe floods in Kelantan caused by the monsson season disrupted transportation and the overall supply chain,
+making it difficult to deliver goods to markets. This make the price higher due to logistical challenges and road closures as reported in The Star News about Flood Woes Worsen in Kelantan, (2023).  
+Additionally, inflation from April to June 2024 worse the supply chain issues, including higher transportation costs and feed prices, making it even harder to maintain steady chicken prices shown (Consumer Prices | OpenDOSM, 2025).
 '''
 st.markdown(multi)
+multi = ''' Climate change also had a impact in the price trend particularly through the monsoon season. 
+The end-of-year flooding in Kelantan disrupted the chicken supply chain, affecting market operations and make prices increase. 
+The seasonal flooding typically hinders production and distribution, further complicating the supply of chicken(NADMA, 2023).
+'''
+st.markdown(multi)
+
+multi = ''' From economic perspective, inflation played a crucial role especially from April to June 2024. 
+As inflation rise from 1.8% to 2% the cost of chicken also increased. 
+Higher feed costs, plus with rising transportation expenses made chicken more expensive during that period(Malaysia Inflation Rate, 2020).
+'''
+st.markdown(multi)
+multi = ''' Lastly, market fundamentals and demand were also influencing price trends. 
+In  the middle of 2023, a drop-in chicken prices were because oversupply and decreased consumer demand(Jamaludin et al., 2023). 
+However, as the Ramadhan season approached in early 2024, there was a surge in demand for chicken particularly for iftar and sahur meals, which contributed to the gradual price increase (Bernama, 2024c). 
+These market shifts, combined with the factors mentioned, shaped the overall price trend through the year.
+'''
+st.markdown(multi)
+
