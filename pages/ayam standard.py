@@ -163,7 +163,7 @@ plt.ylabel('Price')
 plt.plot(daily_avg['price'])
 plt.title(f' Average Daily Price for Item {item_code}')
 plt.show()
-
+st.pyplot(plt.gcf())
 # Test for stationarity
 rolmean = daily_avg['price'].rolling(12).mean()
 rolstd = daily_avg['price'].rolling(12).std()
@@ -175,7 +175,7 @@ plt.plot(rolstd, color='black', label = 'Rolling Std')
 plt.legend(loc='best')
 plt.title('Rolling Mean and Standard Deviation')
 plt.show()
-
+st.pyplot(plt.gcf())
 print("Results of Dickey-Fuller Test:")
 adft = adfuller(daily_avg['price'].dropna(),autolag='AIC')
 output = pd.Series(adft[0:4],index=['Test Statistics','p-value','No. of lags used','Number of observations used'])
@@ -190,7 +190,7 @@ fig = plt.figure(figsize=(16,9))
 result.plot()
 plt.tight_layout()
 plt.show()
-
+st.pyplot(plt.gcf())
 # Prepare data
 df_log = np.log(daily_avg['price'].dropna())
 
@@ -275,7 +275,7 @@ plt.ylabel('Price')
 plt.plot(daily_avg['price'])
 plt.title(f' Average Daily Price for Item {item_code}')
 plt.show()
-
+st.pyplot(plt.gcf())
 # Test for stationarity
 rolmean = daily_avg['price'].rolling(12).mean()
 rolstd = daily_avg['price'].rolling(12).std()
@@ -287,7 +287,7 @@ plt.plot(rolstd, color='black', label = 'Rolling Std')
 plt.legend(loc='best')
 plt.title('Rolling Mean and Standard Deviation')
 plt.show()
-
+st.pyplot(plt.gcf())
 print("Results of Dickey-Fuller Test:")
 adft = adfuller(daily_avg['price'].dropna(),autolag='AIC')
 output = pd.Series(adft[0:4],index=['Test Statistics','p-value','No. of lags used','Number of observations used'])
@@ -302,7 +302,7 @@ fig = plt.figure(figsize=(16,9))
 result.plot()
 plt.tight_layout()
 plt.show()
-
+st.pyplot(plt.gcf())
 # Prepare data
 df_log = np.log(daily_avg['price'].dropna())
 
@@ -369,7 +369,7 @@ plt.ylabel('Price')
 plt.legend(loc='upper left', fontsize=8)
 plt.grid(True, alpha=0.3)
 plt.show()
-
+st.pyplot(plt.gcf())
 # Print future predictions
 print("\nFuture price predictions:")
 print(fc_series)
@@ -388,3 +388,4 @@ plt.ylabel('Price')
 plt.legend(loc='upper left', fontsize=8)
 plt.grid(True, alpha=0.3)
 plt.show()
+st.pyplot(plt.gcf())
