@@ -70,9 +70,12 @@ plt.show()
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
 
-multi = '''If you end a line with two spaces,
-a soft return is used for the next line.
-
-Two (or more) newline characters in a row will result in a hard return.
+multi = '''The price of “Ayam standard” in Kelantan went up and down a lot from June 2023 to June 2024. The highest price was around RM9.30 per 
+kilogram(kg) in June 2023, but by August 2023 it dropped and it became the lowest price that it was about RM 8.10 in August 2023. 
+After that, the price started to slowly go up again. From September to December 2023,
+the price stayed mostly steady, moving between RM8.20 and RM 8.60. As it entered 2024, the price changes a little.
+In January it went up a bit but then dropped a bit in February. By March 2024 the price increased again, showing a steady improvement. 
+Starting in April 2024, the price has been rising again, reaching RM 9.30 in June 2024. 
+This price matched the highest price at the beginning of the recorded price in June 2023.
 '''
 st.markdown(multi)
