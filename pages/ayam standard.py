@@ -36,6 +36,17 @@ plt.grid(True)
 plt.show()
 # Display the plot in Streamlit
 st.pyplot(plt.gcf())
+
+multi = '''The graphs show at the beginning of the times at July 2023, the price was consistently high, around RM9.30 per kilogram. 
+But by the end of July, it started to drop showing the beginning of a dropping price. 
+In August 2023, the price fell hardly reaching the lowest point at about RM 8.00 per kilogram. 
+After that, the price started to level out, moving between RM8.10 and RM 8.50 per kilogram. 
+Starting in November 2023, the price slowly went up reaching around RM 9.00 by January 2024. 
+Between February and April 2024, chicken prices went up and down a lot, with many sudden increases and decreases. 
+Prices moved between RM 8.30 and RM 9.30 per kilogram, showing that the market was unstable. 
+And lastly, in May 2024, prices began to go up steadily and stayed around RM9.20 to RM 9.30 by July 2024.
+'''
+st.markdown(multi)
 # Convert the 'date' column to datetime, trying 'dayfirst=True' in case of inconsistent date formats
 df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
 
