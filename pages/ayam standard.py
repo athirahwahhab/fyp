@@ -128,6 +128,17 @@ st.markdown(multi)
 
 st.title("Prediction Model ARIMA")
 
+import warnings
+warnings.filterwarnings('ignore')
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import math
+
 # Load and prepare data
 item_code = 1  # Specify which item to analyze
 
