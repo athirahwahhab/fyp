@@ -126,3 +126,254 @@ These market shifts, combined with the factors mentioned, shaped the overall pri
 '''
 st.markdown(multi)
 
+st.title("Prediction Model ARIMA")
+
+# Load and prepare data
+item_code = 1  # Specify which item to analyze
+
+df = pd.read_csv('/content/combined_filtered_allyears .csv', parse_dates=['date'])
+item_data = df[df['item_code'] == item_code].copy()
+
+# Calculate daily average
+daily_avg = item_data.groupby('date')['price'].mean().reset_index()
+
+# Handle missing values using interpolation
+daily_avg.set_index('date', inplace=True)
+daily_avg.sort_index(inplace=True)
+idx = pd.date_range(daily_avg.index.min(), daily_avg.index.max())
+daily_avg = daily_avg.reindex(idx)
+daily_avg['price'] = daily_avg['price'].interpolate(method='linear')
+
+# Plot initial price history
+plt.figure(figsize=(10,6))
+plt.grid(True)
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.plot(daily_avg['price'])
+plt.title(f' Average Daily Price for Item {item_code}')
+plt.show()
+
+# Test for stationarity
+rolmean = daily_avg['price'].rolling(12).mean()
+rolstd = daily_avg['price'].rolling(12).std()
+
+plt.figure(figsize=(10,6))
+plt.plot(daily_avg['price'], color='blue',label='Original')
+plt.plot(rolmean, color='red', label='Rolling Mean')
+plt.plot(rolstd, color='black', label = 'Rolling Std')
+plt.legend(loc='best')
+plt.title('Rolling Mean and Standard Deviation')
+plt.show()
+
+print("Results of Dickey-Fuller Test:")
+adft = adfuller(daily_avg['price'].dropna(),autolag='AIC')
+output = pd.Series(adft[0:4],index=['Test Statistics','p-value','No. of lags used','Number of observations used'])
+for key,values in adft[4].items():
+    output['critical value (%s)'%key] =  values
+print(output)
+
+# Decompose the time series
+clean_data = daily_avg['price'].dropna()
+result = seasonal_decompose(clean_data, model='multiplicative', period=30)
+fig = plt.figure(figsize=(16,9))
+result.plot()
+plt.tight_layout()
+plt.show()
+
+# Prepare data
+df_log = np.log(daily_avg['price'].dropna())
+
+# Build model with specified parameters using all data
+# ARIMA(2,0,0)(1,1,1)[7]
+model = SARIMAX(df_log,
+                order=(2, 0, 0),
+                seasonal_order=(1, 1, 1, 7))
+fitted = model.fit()
+
+print("\nARIMA Model Results:")
+print(fitted.summary())
+
+# Get fitted values for historical data
+fitted_values = fitted.get_prediction(start=0)
+fitted_mean = fitted_values.predicted_mean
+
+# Calculate evaluation metrics on historical data
+actual_values = df_log
+predicted_values = fitted_mean
+
+# Transform back to original scale for metrics
+actual_orig = np.exp(actual_values)
+predicted_orig = np.exp(predicted_values)
+
+mse = mean_squared_error(actual_orig, predicted_orig)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(actual_orig, predicted_orig)
+mape = np.mean(np.abs(actual_orig - predicted_orig) / np.abs(actual_orig)) * 100
+
+print('\nModel Performance Metrics (Historical Data):')
+print(f'RMSE: {rmse:.4f}')
+print(f'MAE: {mae:.4f}')
+print(f'MAPE: {mape:.4f}')
+
+# Forecast 90 days into the future
+forecast_period = 90  # 3 months
+forecast_results = fitted.get_forecast(forecast_period)
+fc = forecast_results.predicted_mean
+conf_int = forecast_results.conf_int()
+
+# Generate future dates starting from the end of actual data
+last_date = df_log.index[-1]
+future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
+                           periods=forecast_period,
+                           freq='D')
+
+# Transform back to original scale
+fc_series = np.exp(pd.Series(fc, index=future_dates))
+lower_series = np.exp(pd.Series(conf_int.iloc[:, 0], index=future_dates))
+upper_series = np.exp(pd.Series(conf_int.iloc[:, 1], index=future_dates))
+historical_data = np.exp(df_log)
+fitted_historical = np.exp(fitted_mean)
+
+plt.figure(figsize=(12,6), dpi=100)
+plt.plot(historical_data, label='Actual Data', alpha=0.8)
+plt.plot(fc_series, color='yellow', label='Predicted Price')
+plt.fill_between(future_dates, lower_series, upper_series, color='yellow', alpha=.1, label='Confidence Interval')
+
+
+# Load and prepare data
+item_code = 1  # Specify which item to analyze
+
+df = pd.read_csv('/content/combined_filtered_allyears .csv', parse_dates=['date'])
+item_data = df[df['item_code'] == item_code].copy()
+
+# Calculate daily average
+daily_avg = item_data.groupby('date')['price'].mean().reset_index()
+
+# Handle missing values using interpolation
+daily_avg.set_index('date', inplace=True)
+daily_avg.sort_index(inplace=True)
+idx = pd.date_range(daily_avg.index.min(), daily_avg.index.max())
+daily_avg = daily_avg.reindex(idx)
+daily_avg['price'] = daily_avg['price'].interpolate(method='linear')
+
+# Plot initial price history
+plt.figure(figsize=(10,6))
+plt.grid(True)
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.plot(daily_avg['price'])
+plt.title(f' Average Daily Price for Item {item_code}')
+plt.show()
+
+# Test for stationarity
+rolmean = daily_avg['price'].rolling(12).mean()
+rolstd = daily_avg['price'].rolling(12).std()
+
+plt.figure(figsize=(10,6))
+plt.plot(daily_avg['price'], color='blue',label='Original')
+plt.plot(rolmean, color='red', label='Rolling Mean')
+plt.plot(rolstd, color='black', label = 'Rolling Std')
+plt.legend(loc='best')
+plt.title('Rolling Mean and Standard Deviation')
+plt.show()
+
+print("Results of Dickey-Fuller Test:")
+adft = adfuller(daily_avg['price'].dropna(),autolag='AIC')
+output = pd.Series(adft[0:4],index=['Test Statistics','p-value','No. of lags used','Number of observations used'])
+for key,values in adft[4].items():
+    output['critical value (%s)'%key] =  values
+print(output)
+
+# Decompose the time series
+clean_data = daily_avg['price'].dropna()
+result = seasonal_decompose(clean_data, model='multiplicative', period=30)
+fig = plt.figure(figsize=(16,9))
+result.plot()
+plt.tight_layout()
+plt.show()
+
+# Prepare data
+df_log = np.log(daily_avg['price'].dropna())
+
+# Build model with specified parameters using all data
+# ARIMA(2,0,0)(1,1,1)[7]
+model = SARIMAX(df_log,
+                order=(2, 0, 0),
+                seasonal_order=(1, 1, 1, 7))
+fitted = model.fit()
+
+print("\nARIMA Model Results:")
+print(fitted.summary())
+
+# Get fitted values for historical data
+fitted_values = fitted.get_prediction(start=0)
+fitted_mean = fitted_values.predicted_mean
+
+# Calculate evaluation metrics on historical data
+actual_values = df_log
+predicted_values = fitted_mean
+
+# Transform back to original scale for metrics
+actual_orig = np.exp(actual_values)
+predicted_orig = np.exp(predicted_values)
+
+mse = mean_squared_error(actual_orig, predicted_orig)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(actual_orig, predicted_orig)
+mape = np.mean(np.abs(actual_orig - predicted_orig) / np.abs(actual_orig)) * 100
+
+print('\nModel Performance Metrics (Historical Data):')
+print(f'RMSE: {rmse:.4f}')
+print(f'MAE: {mae:.4f}')
+print(f'MAPE: {mape:.4f}%')
+
+# Forecast 90 days into the future
+forecast_period = 90  # 3 months
+forecast_results = fitted.get_forecast(steps=forecast_period) # Added steps parameter
+fc = forecast_results.predicted_mean
+conf_int = forecast_results.conf_int()
+
+# Generate future dates starting from the end of actual data
+last_date = df_log.index[-1]
+future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
+                           periods=forecast_period,
+                           freq='D')
+
+# Transform back to original scale
+fc_series = np.exp(pd.Series(fc, index=future_dates))
+lower_series = np.exp(pd.Series(conf_int.iloc[:, 0], index=future_dates))
+upper_series = np.exp(pd.Series(conf_int.iloc[:, 1], index=future_dates))
+historical_data = np.exp(df_log)
+fitted_historical = np.exp(fitted_mean)
+
+plt.figure(figsize=(12,6), dpi=100)
+plt.plot(historical_data, label='Actual Data', alpha=0.8)
+plt.plot(fc_series, color='yellow', label='Predicted Price')
+plt.fill_between(future_dates, lower_series, upper_series, color='red', alpha=.1, label='Confidence Interval')
+
+
+plt.title(f'Price Prediction Item Code {item_code}')
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.legend(loc='upper left', fontsize=8)
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Print future predictions
+print("\nFuture price predictions:")
+print(fc_series)
+
+#visualize the graph only show predicted price and confidence interval
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12,6), dpi=100)
+plt.plot(fc_series, color='orange', label='Predicted Price')
+plt.fill_between(future_dates, lower_series, upper_series, color='orange', alpha=.1, label='Confidence Interval')
+plt.axvline(x=test_data.index[-1], color='r', linestyle='--', alpha=0.5, label='End of Historical Data')
+plt.title('Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.legend(loc='upper left', fontsize=8)
+plt.grid(True, alpha=0.3)
+plt.show()
