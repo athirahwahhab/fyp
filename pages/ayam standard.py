@@ -329,28 +329,29 @@ with tab3:
       plt.plot(item_1_aggregated['price'], label="Observed", color="blue")
       plt.plot(forecast_index, forecast.predicted_mean, label="Forecast", color="orange")
       plt.fill_between(
-          forecast_index,
-          forecast.conf_int().iloc[:, 0],
-          forecast.conf_int().iloc[:, 1],
-          color="orange",
-          alpha=0.2,
-          label="95% Confidence Interval"
-       )
-          plt.title("SARIMA Model Forecast")
-          plt.xlabel("Date")
-          plt.ylabel("Price")
-          plt.legend()
-          plt.grid(True)
-          plt.xticks(rotation=45)
-          plt.tight_layout()
-          plt.show()
-          st.pyplot(plt.gcf())
-          # Print model metrics
-          print("\nModel Metrics:")
-          print(f"AIC: {fitted_model.aic:.2f}")
-          print(f"BIC: {fitted_model.bic:.2f}")
+        forecast_index,
+        forecast.conf_int().iloc[:, 0],
+        forecast.conf_int().iloc[:, 1],
+        color="orange",
+        alpha=0.2,
+        label="95% Confidence Interval"
+      )
+      
+      plt.title("SARIMA Model Forecast")
+      plt.xlabel("Date")
+      plt.ylabel("Price")
+      plt.legend()
+      plt.grid(True)
+      plt.xticks(rotation=45)
+      plt.tight_layout()
+      plt.show()
+      st.pyplot(plt.gcf())
+      # Print model metrics
+      print("\nModel Metrics:")
+      print(f"AIC: {fitted_model.aic:.2f}")
+      print(f"BIC: {fitted_model.bic:.2f}")
 
-          except Exception as e:
-          print(f"Error fitting model: {e}")
-          raise
+      except Exception as e:
+        print(f"Error fitting model: {e}")
+      raise
 
