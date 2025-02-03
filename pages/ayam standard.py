@@ -345,7 +345,7 @@ try:
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-st.pyplot(plt.gcf())
+    st.pyplot(plt.gcf())
     # Print model metrics
     print("\nModel Metrics:")
     print(f"AIC: {fitted_model.aic:.2f}")
