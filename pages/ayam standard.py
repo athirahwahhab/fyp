@@ -159,7 +159,6 @@ with tab2:
   plt.legend()
   plt.grid(True)
   plt.show()
-  st.pyplot(plt.gcf())
   # Prepare data for the LSTM model
   dataset = item_1_daily_prices.values.reshape(-1, 1)
 
@@ -341,7 +340,6 @@ with tab3:
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-    st.pyplot(plt.gcf())
     # Perform the Augmented Dickey-Fuller test for stationarity
     adf_result = adfuller(item_1_aggregated['price'])
     print("\nADF Test Results (Original Series):")
@@ -538,16 +536,3 @@ with tab4:
   # Print future predictions
   print("\nFuture price predictions:")
   print(fc_series)
-
-  #visualize the graph only show predicted price and confidence interval
-
-  plt.figure(figsize=(12, 6), dpi=100)
-  plt.plot(fc_series, color='orange', label='Predicted Price')
-  plt.fill_between(future_dates, lower_series, upper_series, color='orange', alpha=0.1, label='Confidence Interval')
-  plt.title(f'Price Prediction Item Code {item_code}')
-  plt.xlabel('Time')
-  plt.ylabel('Price')
-  plt.legend(loc='upper left', fontsize=8)
-  plt.grid(True, alpha=0.3)
-  plt.show()
-  st.pyplot(plt.gcf())
