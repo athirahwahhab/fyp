@@ -69,7 +69,7 @@ April 2024 is the lowest price with prices close to RM11.00. From May 2024, pric
 rise a little, between RM11.50 and RM12.00 by June 2024. While this shows some 
 improvement, prices were still much lower than the last year mid of 2023. 
 '''
-st.markdown(multi
+st.markdown(multi)
 st.title("Ikan Selar Kuning Monthly Average Prices")
 # Convert the 'date' column to datetime, trying 'dayfirst=True' in case of inconsistent date formats
 df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
