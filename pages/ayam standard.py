@@ -125,3 +125,122 @@ However, as the Ramadhan season approached in early 2024, there was a surge in d
 These market shifts, combined with the factors mentioned, shaped the overall price trend through the year.
 '''
 st.markdown(multi)
+
+with tab2:
+  # Importing necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, LSTM
+
+# Load the dataset
+df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
+
+# Filter data for item_code = 1
+item_1_data = df[df['item_code'] == 1].copy()
+
+# Convert 'date' to datetime format
+item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
+
+# Set 'date' as the index
+item_1_data.set_index('date', inplace=True)
+
+# Group by date and calculate the average price
+item_1_daily_prices = item_1_data.groupby('date')['price'].mean()
+
+# Initial data visualization
+plt.figure(figsize=(10, 6))
+plt.plot(item_1_daily_prices, label='Daily Average Price', color='blue', marker='o')
+plt.title('Daily Average Prices of Item 1', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Price (RM)', fontsize=12)
+plt.legend()
+plt.grid(True)
+plt.show()
+st.pyplot(plt.gcf())
+# Prepare data for the LSTM model
+dataset = item_1_daily_prices.values.reshape(-1, 1)
+
+# Normalize the dataset
+scaler = MinMaxScaler(feature_range=(0, 1))
+dataset = scaler.fit_transform(dataset)
+
+# Split into train and test sets
+train_size = int(len(dataset) * 0.67)
+test_size = len(dataset) - train_size
+train, test = dataset[0:train_size, :], dataset[train_size:len(dataset), :]
+
+# Convert an array of values into a dataset matrix
+def create_dataset(dataset, look_back=1):
+    dataX, dataY = [], []
+    for i in range(len(dataset) - look_back - 1):
+        a = dataset[i:(i + look_back), 0]
+        dataX.append(a)
+        dataY.append(dataset[i + look_back, 0])
+    return np.array(dataX), np.array(dataY)
+
+# Reshape into X=t and Y=t+1
+look_back = 1
+trainX, trainY = create_dataset(train, look_back)
+testX, testY = create_dataset(test, look_back)
+
+# Reshape input to be [samples, time steps, features]
+trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
+testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+
+# Create and fit the LSTM network
+model = Sequential()
+model.add(LSTM(4, input_shape=(1, look_back)))
+model.add(Dense(1))
+model.compile(loss='mean_squared_error', optimizer='adam')
+model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+
+# Make predictions
+trainPredict = model.predict(trainX)
+testPredict = model.predict(testX)
+
+# Invert predictions
+trainPredict = scaler.inverse_transform(trainPredict)
+trainY = scaler.inverse_transform([trainY])
+testPredict = scaler.inverse_transform(testPredict)
+testY = scaler.inverse_transform([testY])
+
+# Calculate root mean squared error
+trainScore = np.sqrt(mean_squared_error(trainY[0], trainPredict[:, 0]))
+print('Train Score: %.2f RMSE' % (trainScore))
+testScore = np.sqrt(mean_squared_error(testY[0], testPredict[:, 0]))
+print('Test Score: %.2f RMSE' % (testScore))
+
+# Create figure for final plot
+plt.figure(figsize=(10, 6))
+
+# Plot actual data
+actual_dates = item_1_daily_prices.index
+actual_values = scaler.inverse_transform(dataset)
+plt.plot(actual_dates, actual_values, label='Actual Data', color='blue')
+
+# Plot training predictions
+# Adjust indices to match the correct timeframe for training predictions
+train_dates = actual_dates[look_back:len(trainPredict) + look_back]
+plt.plot(train_dates, trainPredict, label='Train Predictions', color='green')
+
+# Plot test predictions
+# Carefully align test prediction dates
+test_start_idx = len(trainPredict) + look_back
+test_dates = actual_dates[test_start_idx:test_start_idx + len(testPredict)]
+plt.plot(test_dates, testPredict, label='Test Predictions', color='red')
+
+# Add labels and legend
+plt.title('LSTM Model Predictions vs Actual Data', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Price (RM)', fontsize=12)
+plt.xticks(rotation=45)
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+st.pyplot(plt.gcf())
