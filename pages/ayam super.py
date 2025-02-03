@@ -254,7 +254,7 @@ with tab2:
       print(f"AIC: {fitted_model.aic:.2f}")
       print(f"BIC: {fitted_model.bic:.2f}")
 
-  except Exception as e:
+    except Exception as e:
       print(f"Error fitting model: {e}")
       raise
 
