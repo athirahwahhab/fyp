@@ -254,7 +254,7 @@ with tab3:
   from sklearn.metrics import mean_squared_error, mean_absolute_error
   # Load and prepare the dataset
   try:
-    data = pd.read_csv('/content/combined_filtered_allyears .csv')
+    data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
 
     # Filter for item_code 1 and process dates
     item_1_data = data[data['item_code'] == 1].copy()
@@ -271,30 +271,30 @@ with tab3:
     print(f"Error loading or processing data: {e}")
     raise
     # Plot original time series
-plt.figure(figsize=(12, 6))
-plt.plot(item_1_aggregated.index, item_1_aggregated['price'], label="Observed Prices", color="blue")
-plt.title("Price Trend for Item Code 1")
-plt.xlabel("Date")
-plt.ylabel("Price")
-plt.legend()
-plt.grid(True)
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
-st.pyplot(plt.gcf())
-# Perform the Augmented Dickey-Fuller test for stationarity
-adf_result = adfuller(item_1_aggregated['price'])
-print("\nADF Test Results (Original Series):")
-print(f"ADF Statistic: {adf_result[0]:.4f}")
-print(f"p-value: {adf_result[1]:.4f}")
-print("Critical Values:")
-for key, value in adf_result[4].items():
+    plt.figure(figsize=(12, 6))
+    plt.plot(item_1_aggregated.index, item_1_aggregated['price'], label="Observed Prices", color="blue")
+    plt.title("Price Trend for Item Code 1")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+   st.pyplot(plt.gcf())
+   # Perform the Augmented Dickey-Fuller test for stationarity
+   adf_result = adfuller(item_1_aggregated['price'])
+   print("\nADF Test Results (Original Series):")
+   print(f"ADF Statistic: {adf_result[0]:.4f}")
+   print(f"p-value: {adf_result[1]:.4f}")
+   print("Critical Values:")
+   for key, value in adf_result[4].items():
     print(f"\t{key}: {value:.4f}")
 
-# Plot ACF and PACF
-fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-plot_acf(item_1_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
-plot_pacf(item_1_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+    # Plot ACF and PACF
+   fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+   plot_acf(item_1_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+  plot_pacf(item_1_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
 plt.tight_layout()
 plt.show()
 
