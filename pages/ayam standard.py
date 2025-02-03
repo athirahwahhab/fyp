@@ -3,13 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-  st.title("Ayam Standard")
-  multi = '''Ayam Standard refers to chicken that has undergone the standard process of slaughtering and cleaning, ensuring it is prepared according to hygiene and quality standards.
+st.title("Ayam Standard")
+multi = '''Ayam Standard refers to chicken that has undergone the standard process of slaughtering and cleaning, ensuring it is prepared according to hygiene and quality standards.
 This preparation includes the whole chicken carcass and key parts such as the head, feet, liver, and gizzard, which remain intact and not removed. 
 Under the Malaysian government's Maximum Price Control Scheme, the retail price for Ayam Standard was set at RM8.90 per kilogram in Malaysia starting as of June 2022(KPDNK, 2022).
 This classification is to ensure that households have access to affordable chicken options while maintaining market stability. 
 '''
-  st.markdown(multi)
+st.markdown(multi)
 
 tab1, tab2 = st.tabs(["Price Trend ", "Predictive Model"])
 # Load the uploaded CSV file
