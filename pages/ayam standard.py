@@ -288,14 +288,15 @@ with tab3:
     print(f"ADF Statistic: {adf_result[0]:.4f}")
     print(f"p-value: {adf_result[1]:.4f}")
     print("Critical Values:")
+  
     for key, value in adf_result[4].items():
-    print(f"\t{key}: {value:.4f}")
+      print(f"\t{key}: {value:.4f}")
      # Plot ACF and PACF
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-    plot_acf(item_1_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
-    plot_pacf(item_1_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
-    plt.tight_layout()
-    plt.show()
+      fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+      plot_acf(item_1_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+      plot_pacf(item_1_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+      plt.tight_layout()
+      plt.show()
 
     # Fit SARIMA model with parameter
     model = SARIMAX(
