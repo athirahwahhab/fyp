@@ -263,10 +263,10 @@ with tab2:
         current_sequence = np.array([next_pred[0, 0]])
 
     # Inverse transform the predictions to get actual prices
-       future_predictions = np.array(future_predictions).reshape(-1, 1)
-       future_predictions = scaler.inverse_transform(future_predictions)
+    future_predictions = np.array(future_predictions).reshape(-1, 1)
+    future_predictions = scaler.inverse_transform(future_predictions)
 
-       return future_predictions
+    return future_predictions
 
     # Get the last known sequence (using the last value from our dataset)
        last_known_seq = dataset[-1:]
