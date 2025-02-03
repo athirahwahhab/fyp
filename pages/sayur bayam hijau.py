@@ -122,14 +122,14 @@ Razali, 2023).
 '''
   st.markdown(multi)
 
- multi = ''' For market fundamentals and demand in October 2023, the price of green spinach 
+   multi = ''' For market fundamentals and demand in October 2023, the price of green spinach 
 decreases much of it available. This happened due to good weather, which helped farmers grow 
 more vegetable than people needed. As a result, farmers had to sell spinach for less than it cost 
 to grow, just to avoid having too much left over. Even though they lost money farmers kept 
 selling to make some income and some got help from the Federal Agricultural Authority 
 (FAMA)(Ercy Gracella Ajos, 2023). 
 '''
- st.markdown(multi)
+  st.markdown(multi)
 
 with tab2:
   import matplotlib.pyplot as plt
