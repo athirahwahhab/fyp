@@ -15,7 +15,7 @@ Ayam Super is slightly more expensive than Ayam Standard due to the additional c
 '''
 st.markdown(multi)
 
-tab1, tab2, tab3, tab4 = st.tabs(["Price Trend ", "LSTM", "SARIMA", "ARIMA"])
+tab1, tab2, tab3, tab4 = st.tabs(["Price Trend ", "SARIMA", "ARIMA", "LSTM"])
 
 item_2_data = df[df['item_code'] == 2 ].copy()
 
@@ -139,204 +139,117 @@ Similarly, prices increased before Hari Raya as people bought more food for the 
 st.markdown(multi)
 
 with tab2:
-  # Importing necessary libraries
-  import numpy as np
   import matplotlib.pyplot as plt
+  import seaborn as sns
   import pandas as pd
-  from sklearn.preprocessing import MinMaxScaler
-  from sklearn.metrics import mean_squared_error
-  import tensorflow as tf
-  from tensorflow.keras.models import Sequential
-  from tensorflow.keras.layers import Dense, LSTM
-  # Load the dataset
-  df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
-  # Filter data for item_code = 2
-item_2_data = df[df['item_code'] == 2].copy()
+  import numpy as np
+  from statsmodels.tsa.stattools import adfuller
+  from statsmodels.tsa.statespace.sarimax import SARIMAX
+  from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+  from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-# Convert 'date' to datetime format
-item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
+  # Load and prepare the dataset
+  try:
+      data = pd.read_csv('/content/combined_filtered_allyears .csv')
 
-# Set 'date' as the index
-item_2_data.set_index('date', inplace=True)
+    # Filter for item_code 2 and process dates
+    item_2_data = data[data['item_code'] == 2].copy()
+    item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
 
-# Group by date and calculate the average price
-item_2_daily_prices = item_2_data.groupby('date')['price'].mean()
+    # Aggregate price by date and handle missing values
+    item_2_aggregated = item_2_data.groupby('date')['price'].mean().reset_index()
+    item_2_aggregated.set_index('date', inplace=True)
+    item_2_aggregated = item_2_aggregated.asfreq('D')
 
-# Initial data visualization
-plt.figure(figsize=(10, 6))
-plt.plot(item_2_daily_prices, label='Daily Average Price', color='blue', marker='o')
-plt.title('Daily Average Prices of Item 2 ', fontsize=16)
-plt.xlabel('Date', fontsize=12)
-plt.ylabel('Price (RM)', fontsize=12)
-plt.legend()
-plt.grid(True)
-plt.show()
+    # Use interpolation for missing values instead of forward fill
+    item_2_aggregated['price'] = item_2_aggregated['price'].interpolate(method='time')
 
-# Prepare data for the LSTM model
-dataset = item_2_daily_prices.values.reshape(-1, 1)
+    except Exception as e:
+        print(f"Error loading or processing data: {e}")
+        raise
 
-# Normalize the dataset
-scaler = MinMaxScaler(feature_range=(0, 1))
-dataset = scaler.fit_transform(dataset)
+    # Plot original time series
+    plt.figure(figsize=(12, 6))
+    plt.plot(item_2_aggregated.index, item_2_aggregated['price'], label="Observed Prices", color="blue")
+    plt.title("Price Trend for Item Code 2")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
 
-# Split into train and test sets
-train_size = int(len(dataset) * 0.67)
-test_size = len(dataset) - train_size
-train, test = dataset[0:train_size, :], dataset[train_size:len(dataset), :]
+    # Perform the Augmented Dickey-Fuller test for stationarity
+    adf_result = adfuller(item_2_aggregated['price'])
+    print("\nADF Test Results (Original Series):")
+    print(f"ADF Statistic: {adf_result[0]:.4f}")
+    print(f"p-value: {adf_result[1]:.4f}")
+    print("Critical Values:")
+    for key, value in adf_result[4].items():
+       print(f"\t{key}: {value:.4f}")
+      # Plot ACF and PACF
+    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+    plot_acf(item_2_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+    plot_pacf(item_2_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+    plt.tight_layout()
+    plt.show()
 
-# Convert an array of values into a dataset matrix
-def create_dataset(dataset, look_back=1):
-    dataX, dataY = [], []
-    for i in range(len(dataset) - look_back - 1):
-        a = dataset[i:(i + look_back), 0]
-        dataX.append(a)
-        dataY.append(dataset[i + look_back, 0])
-    return np.array(dataX), np.array(dataY)
+    # Fit SARIMA model with specified parameters (2,2,2)(0,1,1,12)
+    print("\nFitting SARIMA(2,2,2)(0,1,1,12) model...")
+    model = SARIMAX(
+      item_2_aggregated['price'],
+      order=(2, 2, 2),
+      seasonal_order=(0, 1, 1, 12),
+      enforce_stationarity=False,
+      enforce_invertibility=False
+    )
 
-# Reshape into X=t and Y=t+1
-look_back = 1
-trainX, trainY = create_dataset(train, look_back)
-testX, testY = create_dataset(test, look_back)
+   try:
+     fitted_model = model.fit(disp=False)
+     print("\nModel Summary:")
+     print(fitted_model.summary())
 
-# Reshape input to be [samples, time steps, features]
-trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
-testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+    # Model diagnostics
+    fitted_model.plot_diagnostics(figsize=(15, 8))
+    plt.tight_layout()
+    plt.show()
 
-# Create and fit the LSTM network
-model = Sequential()
-model.add(LSTM(4, input_shape=(1, look_back)))
-model.add(Dense(1))
-model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(trainX, trainY, epochs=50, batch_size=1, verbose=2)
+    # Generate forecast
+    forecast_steps = 30
+    forecast = fitted_model.get_forecast(steps=forecast_steps)
+    forecast_index = pd.date_range(
+        start=item_2_aggregated.index[-1] + pd.Timedelta(days=1),
+        periods=forecast_steps
+    )
 
-# Make predictions
-trainPredict = model.predict(trainX)
-testPredict = model.predict(testX)
+    # Plot forecast
+    plt.figure(figsize=(12, 6))
+    plt.plot(item_2_aggregated['price'], label="Observed", color="blue")
+    plt.plot(forecast_index, forecast.predicted_mean, label="Forecast", color="orange")
+    plt.fill_between(
+        forecast_index,
+        forecast.conf_int().iloc[:, 0],
+        forecast.conf_int().iloc[:, 1],
+        color="orange",
+        alpha=0.2,
+        label="95% Confidence Interval"
+    )
+    plt.title("SARIMA Item 2 Model Forecast")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+    st.pyplot(plt.gcf())
 
-# Invert predictions
-trainPredict = scaler.inverse_transform(trainPredict)
-trainY = scaler.inverse_transform([trainY])
-testPredict = scaler.inverse_transform(testPredict)
-testY = scaler.inverse_transform([testY])
+    # Print model metrics
+    print("\nModel Metrics:")
+    print(f"AIC: {fitted_model.aic:.2f}")
+    print(f"BIC: {fitted_model.bic:.2f}")
 
-# Calculate root mean squared error
-trainScore = np.sqrt(mean_squared_error(trainY[0], trainPredict[:, 0]))
-print('Train Score: %.2f RMSE' % (trainScore))
-testScore = np.sqrt(mean_squared_error(testY[0], testPredict[:, 0]))
-print('Test Score: %.2f RMSE' % (testScore))
-
-# Create figure for final plot
-plt.figure(figsize=(10, 6))
-
-# Plot actual data
-actual_dates = item_2_daily_prices.index
-actual_values = scaler.inverse_transform(dataset)
-plt.plot(actual_dates, actual_values, label='Actual Data', color='blue')
-
-# Plot training predictions
-# Adjust indices to match the correct timeframe for training predictions
-train_dates = actual_dates[look_back:len(trainPredict) + look_back]
-plt.plot(train_dates, trainPredict, label='Train Predictions', color='green')
-
-# Plot test predictions
-# Carefully align test prediction dates
-test_start_idx = len(trainPredict) + look_back
-test_dates = actual_dates[test_start_idx:test_start_idx + len(testPredict)]
-plt.plot(test_dates, testPredict, label='Test Predictions', color='red')
-
-# Add labels and legend
-plt.title('LSTM Model Predictions vs Actual Data', fontsize=16)
-plt.xlabel('Date', fontsize=12)
-plt.ylabel('Price (RM)', fontsize=12)
-plt.xticks(rotation=45)
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-
-
-def generate_future_predictions(model, last_sequence, n_future_days, scaler):
-
-    future_predictions = []
-    current_sequence = last_sequence.copy()
-
-    for _ in range(n_future_days):
-        # Reshape the sequence for prediction
-        current_sequence_reshaped = current_sequence.reshape((1, 1, 1))
-
-        # Get the next predicted value
-        next_pred = model.predict(current_sequence_reshaped, verbose=0)
-
-        # Store the prediction
-        future_predictions.append(next_pred[0, 0])
-
-        # Update the sequence with the new prediction
-        current_sequence = np.array([next_pred[0, 0]])
-
-    # Inverse transform the predictions to get actual prices
-    future_predictions = np.array(future_predictions).reshape(-1, 1)
-    future_predictions = scaler.inverse_transform(future_predictions)
-
-    return future_predictions
-
-# Get the last known sequence (using the last value from our dataset)
-last_known_seq = dataset[-1:]
-
-# Generate future dates
-last_date = item_2_daily_prices.index[-1]
-future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
-                           periods=90,
-                           freq='D')
-
-# Generate predictions for next 30 days
-n_future_days = 90
-future_predictions = generate_future_predictions(model,
-                                              last_known_seq,
-                                              n_future_days,
-                                              scaler)
-
-# Create final visualization including future predictions
-plt.figure(figsize=(12, 6))
-
-# Plot historical data
-plt.plot(actual_dates, actual_values, label='Historical Data', color='blue')
-plt.plot(train_dates, trainPredict, label='Training Predictions', color='green')
-plt.plot(test_dates, testPredict, label='Test Predictions', color='red')
-
-# Plot future predictions
-plt.plot(future_dates, future_predictions,
-         label='Future Predictions',
-         color='purple',
-         linestyle='--')
-
-# Add confidence intervals for future predictions (simple approach)
-future_std = np.std(actual_values[-90:])  # Using last 30 days as reference
-plt.fill_between(future_dates,
-                future_predictions.flatten() - future_std,
-                future_predictions.flatten() + future_std,
-                color='purple',
-                alpha=0.2,
-                label='Prediction Interval')
-
-plt.title('LSTM Model Predictions Including Future Forecast', fontsize=16)
-plt.xlabel('Date', fontsize=12)
-plt.ylabel('Price (RM)', fontsize=12)
-plt.xticks(rotation=45)
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-st.pyplot(plt.gcf())
-# Print future predictions with dates
-future_forecast = pd.DataFrame({
-    'Date': future_dates,
-    'Predicted_Price': future_predictions.flatten(),
-    'Lower_Bound': future_predictions.flatten() - future_std,
-    'Upper_Bound': future_predictions.flatten() + future_std
-})
-
-print("\nFuture Price Predictions:")
-print(future_forecast.to_string(index=False))
-
-  
-
+    except Exception as e:
+         print(f"Error fitting model: {e}")
+         raise
