@@ -157,7 +157,7 @@ with tab2:
 
   # Load and prepare the dataset
   try:
-    data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv')
+    data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
 
     # Filter for item_code 55 and process dates
     item_55_data = data[data['item_code'] == 55].copy()
@@ -271,7 +271,7 @@ with tab3:
 
   # Load and prepare data
   item_code = 55  # Specify which item to analyze
-  df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv', parse_dates=['date'])
+  df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv', parse_dates=['date'])
   item_data = df[df['item_code'] == item_code].copy()
 
 # Calculate daily average
