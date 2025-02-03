@@ -11,7 +11,7 @@ This classification is to ensure that households have access to affordable chick
 '''
 st.markdown(multi)
 
-tab1, tab2 = st.tabs(["Price Trend ", "Predictive Model"])
+tab1, tab2, tab3, tab4 = st.tabs(["Price Trend ", "LSTM", "SARIMA", "ARIMA"])
 # Load the uploaded CSV file
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
 df = pd.read_csv(file_path)   
@@ -242,3 +242,116 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 st.pyplot(plt.gcf())
+
+with tab3:
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  import pandas as pd
+  import numpy as np
+  from statsmodels.tsa.stattools import adfuller
+  from statsmodels.tsa.statespace.sarimax import SARIMAX
+  from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+  from sklearn.metrics import mean_squared_error, mean_absolute_error
+  # Load and prepare the dataset
+  try:
+    data = pd.read_csv('/content/combined_filtered_allyears .csv')
+
+    # Filter for item_code 1 and process dates
+    item_1_data = data[data['item_code'] == 1].copy()
+    item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
+
+    # Aggregate price by date and handle missing values
+    item_1_aggregated = item_1_data.groupby('date')['price'].mean().reset_index()
+    item_1_aggregated.set_index('date', inplace=True)
+    item_1_aggregated = item_1_aggregated.asfreq('D')
+
+    # Use interpolation for missing values
+    item_1_aggregated['price'] = item_1_aggregated['price'].interpolate(method='time')
+  except Exception as e:
+    print(f"Error loading or processing data: {e}")
+    raise
+    # Plot original time series
+plt.figure(figsize=(12, 6))
+plt.plot(item_1_aggregated.index, item_1_aggregated['price'], label="Observed Prices", color="blue")
+plt.title("Price Trend for Item Code 1")
+plt.xlabel("Date")
+plt.ylabel("Price")
+plt.legend()
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+st.pyplot(plt.gcf())
+# Perform the Augmented Dickey-Fuller test for stationarity
+adf_result = adfuller(item_1_aggregated['price'])
+print("\nADF Test Results (Original Series):")
+print(f"ADF Statistic: {adf_result[0]:.4f}")
+print(f"p-value: {adf_result[1]:.4f}")
+print("Critical Values:")
+for key, value in adf_result[4].items():
+    print(f"\t{key}: {value:.4f}")
+
+# Plot ACF and PACF
+fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+plot_acf(item_1_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+plot_pacf(item_1_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+plt.tight_layout()
+plt.show()
+
+# Fit SARIMA model with parameter
+model = SARIMAX(
+    item_1_aggregated['price'],
+    order=(2, 2, 2),
+    seasonal_order=(0, 1, 1, 12),
+    enforce_stationarity=False,
+    enforce_invertibility=False
+)
+
+try:
+    fitted_model = model.fit(disp=False)
+    print("\nModel Summary:")
+    print(fitted_model.summary())
+
+    # Model diagnostics
+    fitted_model.plot_diagnostics(figsize=(15, 8))
+    plt.tight_layout()
+    plt.show()
+
+    # Generate forecast
+    forecast_steps = 30
+    forecast = fitted_model.get_forecast(steps=forecast_steps)
+    forecast_index = pd.date_range(
+        start=item_1_aggregated.index[-1] + pd.Timedelta(days=1),
+        periods=forecast_steps
+    )
+
+    # Plot forecast
+    plt.figure(figsize=(12, 6))
+    plt.plot(item_1_aggregated['price'], label="Observed", color="blue")
+    plt.plot(forecast_index, forecast.predicted_mean, label="Forecast", color="orange")
+    plt.fill_between(
+        forecast_index,
+        forecast.conf_int().iloc[:, 0],
+        forecast.conf_int().iloc[:, 1],
+        color="orange",
+        alpha=0.2,
+        label="95% Confidence Interval"
+    )
+    plt.title("SARIMA Model Forecast")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+st.pyplot(plt.gcf())
+    # Print model metrics
+    print("\nModel Metrics:")
+    print(f"AIC: {fitted_model.aic:.2f}")
+    print(f"BIC: {fitted_model.bic:.2f}")
+
+except Exception as e:
+    print(f"Error fitting model: {e}")
+    raise
+
