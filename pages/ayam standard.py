@@ -244,7 +244,7 @@ plt.show()
 st.pyplot(plt.gcf())
 
 with tab3:
-  import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
   import seaborn as sns
   import pandas as pd
   import numpy as np
@@ -353,4 +353,3 @@ with tab3:
     except Exception as e:
         print(f"Error fitting model: {e}")
     raise
-
