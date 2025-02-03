@@ -239,7 +239,7 @@ with tab2:
     plt.show()
     st.pyplot(plt.gcf())
 
-    except Exception as e:
-      print(f"Error fitting model: {e}")
-      raise
+  except Exception as e:
+    print(f"Error fitting model: {e}")
+    raise
   
