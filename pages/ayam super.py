@@ -164,7 +164,7 @@ with tab2:
     # Use interpolation for missing values instead of forward fill
       item_2_aggregated['price'] = item_2_aggregated['price'].interpolate(method='time')
     
-    except Exception as e:
+  except Exception as e:
     print(f"Error loading or processing data: {e}")
     raise
 
