@@ -3,11 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-tab1, tab2 = st.tabs(["Price Trend ", "Predictive Model"])
-# Load the uploaded CSV file
-file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
-df = pd.read_csv(file_path)   
-with tab1:
   st.title("Ayam Standard")
   multi = '''Ayam Standard refers to chicken that has undergone the standard process of slaughtering and cleaning, ensuring it is prepared according to hygiene and quality standards.
 This preparation includes the whole chicken carcass and key parts such as the head, feet, liver, and gizzard, which remain intact and not removed. 
@@ -15,12 +10,16 @@ Under the Malaysian government's Maximum Price Control Scheme, the retail price 
 This classification is to ensure that households have access to affordable chicken options while maintaining market stability. 
 '''
   st.markdown(multi)
-# Filter data for item_code = 1
-item_1_data = df[df['item_code'] == 1].copy()
 
-# Convert 'date' to datetime format
+tab1, tab2 = st.tabs(["Price Trend ", "Predictive Model"])
+# Load the uploaded CSV file
+file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
+df = pd.read_csv(file_path)   
+with tab1:
+  # Filter data for item_code = 1
+  item_1_data = df[df['item_code'] == 1].copy()
+  # Convert 'date' to datetime format
 item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
-
 # Set 'date' as the index
 item_1_data.set_index('date', inplace=True)
 
@@ -128,16 +127,15 @@ st.markdown(multi)
 
 with tab2:
   # Importing necessary libraries
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM
-
-# Load the dataset
+  import numpy as np
+  import matplotlib.pyplot as plt
+  import pandas as pd
+  from sklearn.preprocessing import MinMaxScaler
+  from sklearn.metrics import mean_squared_error
+  import tensorflow as tf
+  from tensorflow.keras.models import Sequential
+  from tensorflow.keras.layers import Dense, LSTM
+  # Load the dataset
 df = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
 
 # Filter data for item_code = 1
