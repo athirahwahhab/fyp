@@ -18,22 +18,21 @@ st.markdown(multi)
 tab1, tab2, tab3, tab4 = st.tabs(["Price Trend ", "SARIMA", "ARIMA", "LSTM"])
 
 
-
-item_2_data = df[df['item_code'] == 2 ].copy()
+with tab1: 
+  item_2_data = df[df['item_code'] == 2 ].copy()
 
 # Convert 'date' to datetime format
-item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
+  item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
 
 # Set 'date' as the index
-item_2_data.set_index('date', inplace=True)
+  item_2_data.set_index('date', inplace=True)
 
 # Aggregating prices by date (average price per day)
-item_2_daily_prices = item_2_data.groupby('date')['price'].mean()
+  item_2_daily_prices = item_2_data.groupby('date')['price'].mean()
 
 # Display the processed data
-item_2_daily_prices.head(), item_2_daily_prices.info()
-
-with tab1: 
+  item_2_daily_prices.head(), item_2_daily_prices.info()
+  
   st.title("Ayam Super Average Daily Prices ")
   # Plot the time series data
   plt.figure(figsize=(12, 6))
