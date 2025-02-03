@@ -255,20 +255,20 @@ with tab3:
     # Load and prepare the dataset
     try:
       data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
-
-    # Filter for item_code 1 and process dates
-    item_1_data = data[data['item_code'] == 1].copy()
-    item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
+      
+  # Filter for item_code 1 and process dates
+     item_1_data = data[data['item_code'] == 1].copy()
+     item_1_data['date'] = pd.to_datetime(item_1_data['date'], format='%d-%b-%y')
 
     # Aggregate price by date and handle missing values
-    item_1_aggregated = item_1_data.groupby('date')['price'].mean().reset_index()
-    item_1_aggregated.set_index('date', inplace=True)
-    item_1_aggregated = item_1_aggregated.asfreq('D')
+     item_1_aggregated = item_1_data.groupby('date')['price'].mean().reset_index()
+     item_1_aggregated.set_index('date', inplace=True)
+     item_1_aggregated = item_1_aggregated.asfreq('D')
 
     # Use interpolation for missing values
-    item_1_aggregated['price'] = item_1_aggregated['price'].interpolate(method='time')
-  except Exception as e:
-    print(f"Error loading or processing data: {e}")
+     item_1_aggregated['price'] = item_1_aggregated['price'].interpolate(method='time')
+   except Exception as e:
+     print(f"Error loading or processing data: {e}")
     raise
     # Plot original time series
     plt.figure(figsize=(12, 6))
