@@ -336,21 +336,21 @@ with tab3:
           alpha=0.2,
           label="95% Confidence Interval"
        )
-       plt.title("SARIMA Model Forecast")
-       plt.xlabel("Date")
-       plt.ylabel("Price")
-       plt.legend()
-       plt.grid(True)
-       plt.xticks(rotation=45)
-       plt.tight_layout()
-       plt.show()
-       st.pyplot(plt.gcf())
-       # Print model metrics
-       print("\nModel Metrics:")
-       print(f"AIC: {fitted_model.aic:.2f}")
-       print(f"BIC: {fitted_model.bic:.2f}")
+          plt.title("SARIMA Model Forecast")
+          plt.xlabel("Date")
+          plt.ylabel("Price")
+          plt.legend()
+          plt.grid(True)
+          plt.xticks(rotation=45)
+          plt.tight_layout()
+          plt.show()
+          st.pyplot(plt.gcf())
+          # Print model metrics
+          print("\nModel Metrics:")
+          print(f"AIC: {fitted_model.aic:.2f}")
+          print(f"BIC: {fitted_model.bic:.2f}")
 
-       except Exception as e:
-       print(f"Error fitting model: {e}")
-       raise
+          except Exception as e:
+          print(f"Error fitting model: {e}")
+          raise
 
