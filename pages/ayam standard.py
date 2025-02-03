@@ -324,17 +324,17 @@ with tab3:
       periods=forecast_steps
       )
 # Plot forecast
-       plt.figure(figsize=(12, 6))
-       plt.plot(item_1_aggregated['price'], label="Observed", color="blue")
-       plt.plot(forecast_index, forecast.predicted_mean, label="Forecast", color="orange")
-       plt.fill_between(
-       forecast_index,
-       forecast.conf_int().iloc[:, 0],
-       forecast.conf_int().iloc[:, 1],
-       color="orange",
-       alpha=0.2,
-       label="95% Confidence Interval"
-         
+      plt.figure(figsize=(12, 6))
+      plt.plot(item_1_aggregated['price'], label="Observed", color="blue")
+      plt.plot(forecast_index, forecast.predicted_mean, label="Forecast", color="orange")
+      plt.fill_between(
+      forecast_index,
+      forecast.conf_int().iloc[:, 0],
+      forecast.conf_int().iloc[:, 1],
+      color="orange",
+      alpha=0.2,
+      label="95% Confidence Interval"
+      
       )
       
       plt.title("SARIMA Model Forecast")
