@@ -245,16 +245,16 @@ st.pyplot(plt.gcf())
 
 with tab3:
     import matplotlib.pyplot as plt
-  import seaborn as sns
-  import pandas as pd
-  import numpy as np
-  from statsmodels.tsa.stattools import adfuller
-  from statsmodels.tsa.statespace.sarimax import SARIMAX
-  from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-  from sklearn.metrics import mean_squared_error, mean_absolute_error
-  # Load and prepare the dataset
-  try:
-    data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
+    import seaborn as sns
+    import pandas as pd
+    import numpy as np
+    from statsmodels.tsa.stattools import adfuller
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+    from sklearn.metrics import mean_squared_error, mean_absolute_error
+    # Load and prepare the dataset
+    try:
+      data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_filtered_allyears%20.csv')
 
     # Filter for item_code 1 and process dates
     item_1_data = data[data['item_code'] == 1].copy()
