@@ -153,59 +153,59 @@ with tab2:
       data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv')
 
     # Filter for item_code 2 and process dates
-    item_2_data = data[data['item_code'] == 2].copy()
-    item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
+      item_2_data = data[data['item_code'] == 2].copy()
+      item_2_data['date'] = pd.to_datetime(item_2_data['date'], format='%d-%b-%y')
 
     # Aggregate price by date and handle missing values
-    item_2_aggregated = item_2_data.groupby('date')['price'].mean().reset_index()
-    item_2_aggregated.set_index('date', inplace=True)
-    item_2_aggregated = item_2_aggregated.asfreq('D')
+      item_2_aggregated = item_2_data.groupby('date')['price'].mean().reset_index()
+      item_2_aggregated.set_index('date', inplace=True)
+      item_2_aggregated = item_2_aggregated.asfreq('D')
 
     # Use interpolation for missing values instead of forward fill
-    item_2_aggregated['price'] = item_2_aggregated['price'].interpolate(method='time')
+      item_2_aggregated['price'] = item_2_aggregated['price'].interpolate(method='time')
 
-    except Exception as e:
+      except Exception as e:
         print(f"Error loading or processing data: {e}")
         raise
 
     # Plot original time series
-    plt.figure(figsize=(12, 6))
-    plt.plot(item_2_aggregated.index, item_2_aggregated['price'], label="Observed Prices", color="blue")
-    plt.title("Price Trend for Item Code 2")
-    plt.xlabel("Date")
-    plt.ylabel("Price")
-    plt.legend()
-    plt.grid(True)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+      plt.figure(figsize=(12, 6))
+      plt.plot(item_2_aggregated.index, item_2_aggregated['price'], label="Observed Prices", color="blue")
+      plt.title("Price Trend for Item Code 2")
+      plt.xlabel("Date")
+      plt.ylabel("Price")
+      plt.legend()
+      plt.grid(True)
+      plt.xticks(rotation=45)
+      plt.tight_layout()
+      plt.show()
 
     # Perform the Augmented Dickey-Fuller test for stationarity
-    adf_result = adfuller(item_2_aggregated['price'])
-    print("\nADF Test Results (Original Series):")
-    print(f"ADF Statistic: {adf_result[0]:.4f}")
-    print(f"p-value: {adf_result[1]:.4f}")
-    print("Critical Values:")
-    for key, value in adf_result[4].items():
-       print(f"\t{key}: {value:.4f}")
+      adf_result = adfuller(item_2_aggregated['price'])
+      print("\nADF Test Results (Original Series):")
+      print(f"ADF Statistic: {adf_result[0]:.4f}")
+      print(f"p-value: {adf_result[1]:.4f}")
+      print("Critical Values:")
+      for key, value in adf_result[4].items():
+        print(f"\t{key}: {value:.4f}")
       # Plot ACF and PACF
-    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-    plot_acf(item_2_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
-    plot_pacf(item_2_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
-    plt.tight_layout()
-    plt.show()
+      fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+      plot_acf(item_2_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+      plot_pacf(item_2_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+      plt.tight_layout()
+      plt.show()
 
-    # Fit SARIMA model with specified parameters (2,2,2)(0,1,1,12)
-    print("\nFitting SARIMA(2,2,2)(0,1,1,12) model...")
-    model = SARIMAX(
-      item_2_aggregated['price'],
-      order=(2, 2, 2),
-      seasonal_order=(0, 1, 1, 12),
-      enforce_stationarity=False,
-      enforce_invertibility=False
-    )
+      # Fit SARIMA model with specified parameters (2,2,2)(0,1,1,12)
+      print("\nFitting SARIMA(2,2,2)(0,1,1,12) model...")
+      model = SARIMAX(
+        item_2_aggregated['price'],
+        order=(2, 2, 2),
+        seasonal_order=(0, 1, 1, 12),
+        enforce_stationarity=False,
+        enforce_invertibility=False
+      )
 
-   try:
+try:
      fitted_model = model.fit(disp=False)
      print("\nModel Summary:")
      print(fitted_model.summary())
