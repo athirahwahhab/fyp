@@ -243,6 +243,81 @@ plt.tight_layout()
 plt.show()
 st.pyplot(plt.gcf())
 
+
+def generate_future_predictions(model, last_sequence, n_future_days, scaler):
+
+    future_predictions = []
+    current_sequence = last_sequence.copy()
+
+    for _ in range(n_future_days):
+        # Reshape the sequence for prediction
+        current_sequence_reshaped = current_sequence.reshape((1, 1, 1))
+
+        # Get the next predicted value
+        next_pred = model.predict(current_sequence_reshaped, verbose=0)
+
+        # Store the prediction
+        future_predictions.append(next_pred[0, 0])
+
+        # Update the sequence with the new prediction
+        current_sequence = np.array([next_pred[0, 0]])
+
+    # Inverse transform the predictions to get actual prices
+    future_predictions = np.array(future_predictions).reshape(-1, 1)
+    future_predictions = scaler.inverse_transform(future_predictions)
+
+    return future_predictions
+
+# Get the last known sequence (using the last value from our dataset)
+last_known_seq = dataset[-1:]
+
+# Generate future dates
+last_date = item_1_daily_prices.index[-1]
+future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1),
+                           periods=90,
+                           freq='D')
+
+# Generate predictions for next 30 days
+n_future_days = 90
+future_predictions = generate_future_predictions(model,
+                                              last_known_seq,
+                                              n_future_days,
+                                              scaler)
+
+# Create final visualization including future predictions
+plt.figure(figsize=(12, 6))
+
+# Plot historical data
+plt.plot(actual_dates, actual_values, label='Historical Data', color='blue')
+plt.plot(train_dates, trainPredict, label='Training Predictions', color='green')
+plt.plot(test_dates, testPredict, label='Test Predictions', color='red')
+
+# Plot future predictions
+plt.plot(future_dates, future_predictions,
+         label='Future Predictions',
+         color='purple',
+         linestyle='--')
+
+# Add confidence intervals for future predictions (simple approach)
+future_std = np.std(actual_values[-90:])  # Using last 30 days as reference
+plt.fill_between(future_dates,
+                future_predictions.flatten() - future_std,
+                future_predictions.flatten() + future_std,
+                color='purple',
+                alpha=0.2,
+                label='Prediction Interval')
+
+plt.title('LSTM Model Predictions Including Future Forecast', fontsize=16)
+plt.xlabel('Date', fontsize=12)
+plt.ylabel('Price (RM)', fontsize=12)
+plt.xticks(rotation=45)
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+st.pyplot(plt.gcf())
+
+
 with tab3:
     import matplotlib.pyplot as plt
     import seaborn as sns
