@@ -240,7 +240,7 @@ with tab2:
   plt.grid(True)
   plt.tight_layout()
   plt.show()
-
+  st.pyplot(plt.gcf())
   def generate_future_predictions(model, last_sequence, n_future_days, scaler):
 
     future_predictions = []
@@ -283,14 +283,11 @@ with tab2:
     plt.plot(actual_dates, actual_values, label='Historical Data', color='blue')
     plt.plot(train_dates, trainPredict, label='Training Predictions', color='green')
     plt.plot(test_dates, testPredict, label='Test Predictions', color='red')
-
     # Plot future predictions
     plt.plot(future_dates, future_predictions, label='Future Predictions', color='purple', linestyle='--')
-
     # Add confidence intervals for future predictions (simple approach)
     future_std = np.std(actual_values[-90:])  # Using last 30 days as reference
     plt.fill_between(future_dates, future_predictions.flatten() - future_std, future_predictions.flatten() + future_std, color='purple', alpha=0.2, label='Prediction Interval')
-
     plt.title('LSTM Model Predictions Including Future Forecast', fontsize=16)
     plt.xlabel('Date', fontsize=12)
     plt.ylabel('Price (RM)', fontsize=12)
