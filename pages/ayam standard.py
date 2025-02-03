@@ -269,7 +269,7 @@ with tab3:
       item_1_aggregated['price'] = item_1_aggregated['price'].interpolate(method='time')
     except Exception as e:
       print(f"Error loading or processing data: {e}")
-    raise
+      raise
     # Plot original time series
     plt.figure(figsize=(12, 6))
     plt.plot(item_1_aggregated.index, item_1_aggregated['price'], label="Observed Prices", color="blue")
@@ -352,4 +352,4 @@ with tab3:
       print(f"BIC: {fitted_model.bic:.2f}")
     except Exception as e:
         print(f"Error fitting model: {e}")
-    raise
+        raise
