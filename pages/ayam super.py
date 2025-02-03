@@ -211,9 +211,9 @@ with tab2:
     )
 
   try:
-      fitted_model = model.fit(disp=False)
-      print("\nModel Summary:")
-      print(fitted_model.summary())
+    fitted_model = model.fit(disp=False)
+    print("\nModel Summary:")
+    print(fitted_model.summary())
 
     # Model diagnostics
       fitted_model.plot_diagnostics(figsize=(15, 8))
