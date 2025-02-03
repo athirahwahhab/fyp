@@ -237,7 +237,7 @@ try:
         alpha=0.2,
         label="95% Confidence Interval"
     )
-    plt.title("SARIMA(2,2,2)(0,1,1,12) Model Forecast")
+    plt.title("SARIMA Model Forecast")
     plt.xlabel("Date")
     plt.ylabel("Price")
     plt.legend()
@@ -245,6 +245,7 @@ try:
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+    st.pyplot(plt.gcf())
 
     # Print model metrics
     print("\nModel Metrics:")
