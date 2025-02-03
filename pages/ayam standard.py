@@ -3,18 +3,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
+tab1, tab2 = st.tabs(["Price Trend ", "Predictive Model"])
 # Load the uploaded CSV file
 file_path = 'https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv'
 df = pd.read_csv(file_path)   
-
-st.title("Ayam Standard")
-multi = '''Ayam Standard refers to chicken that has undergone the standard process of slaughtering and cleaning, ensuring it is prepared according to hygiene and quality standards.
+with tab1:
+  st.title("Ayam Standard")
+  multi = '''Ayam Standard refers to chicken that has undergone the standard process of slaughtering and cleaning, ensuring it is prepared according to hygiene and quality standards.
 This preparation includes the whole chicken carcass and key parts such as the head, feet, liver, and gizzard, which remain intact and not removed. 
 Under the Malaysian government's Maximum Price Control Scheme, the retail price for Ayam Standard was set at RM8.90 per kilogram in Malaysia starting as of June 2022(KPDNK, 2022).
 This classification is to ensure that households have access to affordable chicken options while maintaining market stability. 
 '''
-st.markdown(multi)
+  st.markdown(multi)
 # Filter data for item_code = 1
 item_1_data = df[df['item_code'] == 1].copy()
 
