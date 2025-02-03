@@ -12,8 +12,7 @@ st.title("Ikan Kembung")
 multi = '''Ikan kembung is a Indian mackerel that is a nutritious and affordable local fish in 
 Malaysia that rich in omega-3 fatty acids, protein, vitamin D, B12,B3,B6 and mineral like 
 potassium(Mel, 2024). The benefit is can improves eye health and this fish commonly cooked 
-in Malaysia as “asam pedas” or just simply fried or grilled to making it healthy to any diet(Mel, 
-2024)
+in Malaysia as “asam pedas” or just simply fried or grilled to making it healthy to any diet(Mel, 2024)
 '''
 st.markdown(multi)
 # Filter data for item_code = 55
