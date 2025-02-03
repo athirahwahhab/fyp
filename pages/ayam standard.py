@@ -243,14 +243,13 @@ with tab2:
   plt.show()
   st.pyplot(plt.gcf())
 
-
   def generate_future_predictions(model, last_sequence, n_future_days, scaler):
-    
+
     future_predictions = []
     current_sequence = last_sequence.copy()
 
-  for _ in range(n_future_days):
-    # Reshape the sequence for prediction
+    for _ in range(n_future_days):
+        # Reshape the sequence for prediction
         current_sequence_reshaped = current_sequence.reshape((1, 1, 1))
 
         # Get the next predicted value
