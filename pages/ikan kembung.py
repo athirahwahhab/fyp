@@ -157,7 +157,7 @@ with tab2:
 
   # Load and prepare the dataset
   try:
-    data = pd.read_csv('/content/combined_filtered_allyears .csv')
+    data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv')
 
     # Filter for item_code 55 and process dates
     item_55_data = data[data['item_code'] == 55].copy()
@@ -251,7 +251,8 @@ with tab2:
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+    st.pyplot(plt.gcf())
 
-except Exception as e:
+  except Exception as e:
     print(f"Error fitting model: {e}")
     raise
