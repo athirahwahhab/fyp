@@ -17,7 +17,6 @@ st.markdown(multi)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Price Trend ", "SARIMA", "ARIMA", "LSTM"])
 
-
 with tab1: 
   # Filter data for item_code = 1556
   item_1556_data = df[df['item_code'] == 1556].copy()
