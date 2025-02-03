@@ -471,7 +471,6 @@ with tab4:
   plt.grid(True)
   plt.tight_layout()
   plt.show()
-  st.pyplot(plt.gcf())
   
   def generate_future_predictions(model, last_sequence, n_future_days, scaler):
     future_predictions = []
