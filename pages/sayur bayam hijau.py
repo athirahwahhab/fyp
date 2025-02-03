@@ -344,7 +344,7 @@ with tab3:
 
   plt.figure(figsize=(12, 6), dpi=100)
   plt.plot(historical_data, label='Actual Data', alpha=0.8)
-    plt.plot(fc_series, color='orange', label='Predicted Price')
+  plt.plot(fc_series, color='orange', label='Predicted Price')
   plt.fill_between(future_dates, lower_series, upper_series, color='orange', alpha=0.1, label='Confidence Interval')
   plt.title(f'Price Prediction Item Code {item_code}')
   plt.xlabel('Time')
