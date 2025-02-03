@@ -168,44 +168,44 @@ with tab2:
     print(f"Error loading or processing data: {e}")
     raise
 
-# Plot original time series
-plt.figure(figsize=(12, 6))
-plt.plot(item_2_aggregated.index, item_2_aggregated['price'], label="Observed Prices", color="blue")
-plt.title("Price Trend for Item Code 2")
-plt.xlabel("Date")
-plt.ylabel("Price")
-plt.legend()
-plt.grid(True)
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+  # Plot original time series
+  plt.figure(figsize=(12, 6))
+  plt.plot(item_2_aggregated.index, item_2_aggregated['price'], label="Observed Prices", color="blue")
+  plt.title("Price Trend for Item Code 2")
+  plt.xlabel("Date")
+  plt.ylabel("Price")
+  plt.legend()
+  plt.grid(True)
+  plt.xticks(rotation=45)
+  plt.tight_layout()
+  plt.show()
 
-# Perform the Augmented Dickey-Fuller test for stationarity
-adf_result = adfuller(item_2_aggregated['price'])
-print("\nADF Test Results (Original Series):")
-print(f"ADF Statistic: {adf_result[0]:.4f}")
-print(f"p-value: {adf_result[1]:.4f}")
-print("Critical Values:")
-for key, value in adf_result[4].items():
-    print(f"\t{key}: {value:.4f}")
+  # Perform the Augmented Dickey-Fuller test for stationarity
+  adf_result = adfuller(item_2_aggregated['price'])
+  print("\nADF Test Results (Original Series):")
+  print(f"ADF Statistic: {adf_result[0]:.4f}")
+  print(f"p-value: {adf_result[1]:.4f}")
+  print("Critical Values:")
+  for key, value in adf_result[4].items():
+      print(f"\t{key}: {value:.4f}")
 
 
-# Plot ACF and PACF
-fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-plot_acf(item_2_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
-plot_pacf(item_2_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
-plt.tight_layout()
-plt.show()
+  # Plot ACF and PACF
+  fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+  plot_acf(item_2_aggregated['price'], lags=40, ax=axes[0], title="ACF of Series")
+  plot_pacf(item_2_aggregated['price'], lags=40, ax=axes[1], title="PACF of Series")
+  plt.tight_layout()
+  plt.show()
 
-# Fit SARIMA model with specified parameters (2,2,2)(0,1,1,12)
-print("\nFitting SARIMA(2,2,2)(0,1,1,12) model...")
-model = SARIMAX(
+  # Fit SARIMA model with specified parameters (2,2,2)(0,1,1,12)
+  print("\nFitting SARIMA(2,2,2)(0,1,1,12) model...")
+  model = SARIMAX(
     item_2_aggregated['price'],
     order=(2, 2, 2),
     seasonal_order=(0, 1, 1, 12),
     enforce_stationarity=False,
     enforce_invertibility=False
-)
+  )
 
 try:
     fitted_model = model.fit(disp=False)
