@@ -281,7 +281,7 @@ with tab3:
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-   st.pyplot(plt.gcf())
+   st.pyplot(plt.gcf()
    # Perform the Augmented Dickey-Fuller test for stationarity
    adf_result = adfuller(item_1_aggregated['price'])
    print("\nADF Test Results (Original Series):")
