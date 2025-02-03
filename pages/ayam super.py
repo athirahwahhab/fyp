@@ -210,16 +210,15 @@ with tab2:
       enforce_invertibility=False
     )
 
-  try:
-    fitted_model = model.fit(disp=False)
-    print("\nModel Summary:")
-    print(fitted_model.summary())
-
-    # Model diagnostics
+    try:
+      fitted_model = model.fit(disp=False)
+      print("\nModel Summary:")
+      print(fitted_model.summary())
+      # Model diagnostics
       fitted_model.plot_diagnostics(figsize=(15, 8))
       plt.tight_layout()
       plt.show()
-
+  
     # Generate forecast
       forecast_steps = 30
       forecast = fitted_model.get_forecast(steps=forecast_steps)
