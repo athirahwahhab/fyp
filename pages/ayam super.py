@@ -150,7 +150,7 @@ with tab2:
 
   # Load and prepare the dataset
   try:
-      data = pd.read_csv('/content/combined_filtered_allyears .csv')
+      data = pd.read_csv('https://raw.githubusercontent.com/athirahwahhab/fyp/refs/heads/main/data/combined_output_latest.csv')
 
     # Filter for item_code 2 and process dates
     item_2_data = data[data['item_code'] == 2].copy()
